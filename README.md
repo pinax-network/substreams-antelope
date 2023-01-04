@@ -1,7 +1,7 @@
 # `Substreams` for **Antelope**
 
 [![Build Status](https://github.com/EOS-Nation/substreams-antelope-core/actions/workflows/test.yml/badge.svg)](https://github.com/EOS-Nation/substreams-antelope-core/actions/workflows/test.yml)
-![License](https://img.shields.io/github/license/EOS-Nation-core/substreams-antelope)
+![License](https://img.shields.io/github/license/EOS-Nation/substreams-antelope-core)
 
 > `Substreams` made for Antelope based chains powered by `Fireshose` V2.
 
