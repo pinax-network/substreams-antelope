@@ -5,7 +5,32 @@
 
 > Substream core for Antelope chains. This contains the generated protobuffer for the Antelope blocks as well as helper methods to extract and parse block data.
 
+### Further resources
+
 - [Substreams documentation](https://substreams.streamingfast.io)
+
+## Quickstart
+
+**Cargo.toml**
+
+```toml
+[dependencies]
+substreams = "^0.5.0"
+substreams-antelope-core = "^0.0.2"
+```
+
+**src/lib.rs**
+
+```rust
+use substreams::prelude::*;
+use substreams::errors::Error;
+use substreams_antelope_core::pb::antelope::{Block};
+
+#[substreams::handlers::map]
+fn map_blocks(block: Block) -> Result<Block, Error> {
+    Ok(block)
+}
+```
 
 ## Prerequisites
 
