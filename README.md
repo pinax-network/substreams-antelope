@@ -3,38 +3,9 @@
 [![Build Status](https://github.com/EOS-Nation/substreams-antelope-core/actions/workflows/test.yml/badge.svg)](https://github.com/EOS-Nation/substreams-antelope-core/actions/workflows/test.yml)
 ![License](https://img.shields.io/github/license/EOS-Nation/substreams-antelope-core)
 
-> `Substreams` made for Antelope based chains powered by `Fireshose` V2.
-
-### Firsehose V2
-
-| Chain       | Host     |
-|-------------|----------|
-| EOS         | `eos.firehose.eosnation.io:9001`
-| WAX         | `wax.firehose.eosnation.io:9001`
-| UX          | `ux.firehose.eosnation.io:9001`
-| Telos       | `telos.firehose.eosnation.io:9001`
-| Ore         | `ore.firehose.eosnation.io:9001`
-
-### Firsehose V2 (Testnets)
-
-| Chain         | Host     |
-|---------------|----------|
-| WAX Testnet   | `waxtest.firehose.eosnation.io:9001`
-| Jungle 4      | `jungle4.firehose.eosnation.io:9001`
-| Kylin         | `kylin.firehose.eosnation.io:9001`
-| Telos Testnet | `telostest.firehose.eosnation.io:9001`
-| Ore Stage     | `orestage.firehose.eosnation.io:9001`
-
-### Further resources
+> Substream core for Antelope chains. This contains the generated protobuffer for the Antelope blocks as well as helper methods to extract and parse block data.
 
 - [Substreams documentation](https://substreams.streamingfast.io)
-
-## Repository structure
-
-This repository currently holds all substreams as well as the SDK library. 
-
-- [`/core`](core) holds the Substream core SDK for Antelope chains. This contains the generated protobuffer for the Antelope blocks as well as helper methods to extract and parse block data.
-- [`/substreams`](substreams) holds all the substreams bundled into their own subfolder.
 
 ## Prerequisites
 

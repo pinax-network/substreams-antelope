@@ -1,7 +1,7 @@
 [package]
 name = "substreams-antelope-core"
 version = "0.0.1"
-description = "Substreams core for Antelope chains."
+description = "Substreams for Antelope"
 edition = "2021"
 homepage = "https://github.com/EOS-Nation/substreams-antelope-core"
 repository = "https://github.com/EOS-Nation/substreams-antelope-core"
