@@ -3,14 +3,16 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  tests:
+  build_and_test:
+    name: Substreams Antelope Core
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Rust
-        uses: actions-rs/toolchain@v1
+      - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
 
-      - name: 'Build all substreams'
-        run: ./build-all.sh
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features --target wasm32-unknown-unknown

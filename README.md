@@ -1,7 +1,7 @@
 # `Substreams` for **Antelope**
 
-[![Build Status](https://github.com/EOS-Nation/substreams-antelope/actions/workflows/test.yml/badge.svg)](https://github.com/EOS-Nation/substreams-antelope/actions/workflows/test.yml)
-![License](https://img.shields.io/github/license/EOS-Nation/substreams-antelope)
+[![Build Status](https://github.com/EOS-Nation/substreams-antelope-core/actions/workflows/test.yml/badge.svg)](https://github.com/EOS-Nation/substreams-antelope-core/actions/workflows/test.yml)
+![License](https://img.shields.io/github/license/EOS-Nation-core/substreams-antelope)
 
 > `Substreams` made for Antelope based chains powered by `Fireshose` V2.
 
@@ -24,13 +24,6 @@
 | Kylin         | `kylin.firehose.eosnation.io:9001`
 | Telos Testnet | `telostest.firehose.eosnation.io:9001`
 | Ore Stage     | `orestage.firehose.eosnation.io:9001`
-
-## Substreams
-
-| Substream      | Description |
-|----------------|-------------|
-| [`eosio.tokens`](substreams/eosio.token)  | Maps & Store module for `eosio.token` events
-| [`common`](substreams/common)  | Common Maps module for all events
 
 ### Further resources
 
