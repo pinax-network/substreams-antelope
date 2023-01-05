@@ -16,7 +16,7 @@
 ```toml
 [dependencies]
 substreams = "^0.5.0"
-substreams-antelope-core = "^0.0.2"
+substreams-antelope-core = "^0.0.3"
 ```
 
 **src/lib.rs**
@@ -24,11 +24,18 @@ substreams-antelope-core = "^0.0.2"
 ```rust
 use substreams::prelude::*;
 use substreams::errors::Error;
-use substreams_antelope_core::pb::antelope::{Block};
+use substreams_antelope_core::pb::antelope::{Block, ActionTraces};
 
 #[substreams::handlers::map]
-fn map_blocks(block: Block) -> Result<Block, Error> {
-    Ok(block)
+fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
+    let mut action_traces = vec![];  
+
+    for trx in block.clone().all_transaction_traces() {
+        for trace in trx.action_traces.clone() {
+            action_traces.push(trace);
+        }
+    }
+    Ok(ActionTraces { action_traces })
 }
 ```
 
