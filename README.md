@@ -1,6 +1,6 @@
 # [`Substreams`](https://substreams.streamingfast.io/) for [**Antelope**](http://antelope.io/)
 
-[<img alt="github" src="https://img.shields.io/badge/Github-substreams-antelope-8da0cb?style=for-the-badge&logo=github" height="20">](https://github.com/pinax-network/substreams-antelope)
+[<img alt="github" src="https://img.shields.io/badge/Github-substreams-8da0cb?style=for-the-badge&logo=github" height="20">](https://github.com/pinax-network/substreams-antelope)
 [<img alt="crates.io" src="https://img.shields.io/crates/v/antelope.svg?style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/antelope)
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-antelope-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/antelope)
 [<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pinax-network/substreams-antelope/ci.yml?branch=develop&style=for-the-badge" height="20">](https://github.com/pinax-network/substreams-antelope/actions?query=branch%3Adevelop)
