@@ -1,5 +1,5 @@
 use crate::block::pb::TransactionStatus::TransactionstatusExecuted;
-use crate::pb::antelope as pb;
+use crate::pb;
 
 impl pb::Block {
     /// returns all transaction traces from the block.
