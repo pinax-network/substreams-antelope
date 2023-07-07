@@ -40,4 +40,13 @@ impl pb::Block {
         }
         self.unfiltered_executed_total_action_count
     }
+
+    pub fn action_calls(&self) -> impl Iterator<Item = &pb::ActionTrace> {
+        self.all_transaction_traces()
+            .flat_map(|trx| trx.action_traces.iter())
+            .filter_map(|action_trace| match action_trace.action.as_ref().unwrap() {
+                pb::Action::ActionTrace(call) => Some(call),
+                _ => None,
+            })
+    }
 }
