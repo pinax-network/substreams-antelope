@@ -17,9 +17,11 @@
 //!     - [x] executed_total_action_count
 
 /// Modules for generated protobuffer
-#[path = "pb/sf.antelope.type.v1.rs"]
-#[allow(dead_code)]
-pub mod pb;
+
+pub mod pb {
+    include!(concat!(env!("OUT_DIR"), "/sf.antelope.r#type.v1.rs"));
+}
+
 pub use self::pb::*;
 
 /// Modules Antelope Block
