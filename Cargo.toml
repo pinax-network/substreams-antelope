@@ -1,6 +1,6 @@
 [package]
 name = "substreams-antelope"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Fred <fred@pinax.network>", "Denis <denis@pinax.network>", "Yaro <yaro@pinax.network>"]
 description = "Substreams for Antelope"
 homepage = "https://github.com/pinax-network/substreams-antelope"

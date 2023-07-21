@@ -38,7 +38,7 @@ $ cargo add substreams-antelope
 ```toml
 [dependencies]
 substreams = "0.5"
-substreams-antelope = "0.1"
+substreams-antelope = "0.2"
 ```
 
 **src/lib.rs**
@@ -54,7 +54,7 @@ fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
 
     for trx in block.all_transaction_traces() {
         for trace in trx.action_traces {
-            action_traces.push(trace.clone());
+            action_traces.push(trace);
         }
     }
     Ok(ActionTraces { action_traces })

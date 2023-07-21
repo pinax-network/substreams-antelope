@@ -3,18 +3,18 @@ use crate::pb;
 
 impl pb::Block {
     /// returns all transaction traces from the block.
-    pub fn all_transaction_traces(&self) -> impl Iterator<Item = &pb::TransactionTrace> {
+    pub fn all_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
         if self.filtering_applied {
-            return self.filtered_transaction_traces.iter();
+            return self.filtered_transaction_traces.into_iter();
         }
-        self.unfiltered_transaction_traces.iter()
+        self.unfiltered_transaction_traces.into_iter()
     }
 
     /// returns all transaction traces which have the status `executed`
-    pub fn executed_transaction_traces(&self) -> impl Iterator<Item = &pb::TransactionTrace> {
+    pub fn executed_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
         return self
             .all_transaction_traces()
-            .filter(|trx| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32);
+            .filter(|trx: &crate::TransactionTrace| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32);
     }
 
     /// returns the number of transaction traces included in this block
