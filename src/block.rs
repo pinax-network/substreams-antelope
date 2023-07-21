@@ -42,3 +42,81 @@ impl pb::Block {
     }
 
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::block::pb::TransactionStatus::TransactionstatusExecuted;
+
+    // Helper function to create a test pb::Block instance
+    fn create_test_block(
+        filtering_applied: bool,
+        unfiltered_transaction_traces: Vec<pb::TransactionTrace>,
+        filtered_transaction_traces: Vec<pb::TransactionTrace>,
+        unfiltered_transaction_count: u32,
+        filtered_transaction_count: u32,
+        unfiltered_executed_input_action_count: u32,
+        filtered_executed_input_action_count: u32,
+        unfiltered_executed_total_action_count: u32,
+        filtered_executed_total_action_count: u32,
+    ) -> pb::Block {
+        pb::Block {
+            filtering_applied,
+            unfiltered_transaction_traces,
+            filtered_transaction_traces,
+            unfiltered_transaction_count,
+            filtered_transaction_count,
+            unfiltered_executed_input_action_count,
+            filtered_executed_input_action_count,
+            unfiltered_executed_total_action_count,
+            filtered_executed_total_action_count,
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn test_all_transaction_traces() {
+        let unfiltered_traces = vec![
+            pb::TransactionTrace { id: String::from("trx1"), ..Default::default() },
+            pb::TransactionTrace { id: String::from("trx2"), ..Default::default() },
+        ];
+        let block = create_test_block(false, unfiltered_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
+
+        let all_traces: Vec<_> = block.all_transaction_traces().collect();
+        assert_eq!(all_traces, unfiltered_traces);
+    }
+
+    #[test]
+    fn test_executed_transaction_traces() {
+        let executed_traces = vec![
+            pb::TransactionTrace { id: String::from("trx1"), receipt: Some(pb::TransactionReceiptHeader { status: TransactionstatusExecuted as i32, ..Default::default() }), ..Default::default() },
+            pb::TransactionTrace { id: String::from("trx2"), receipt: Some(pb::TransactionReceiptHeader { status: TransactionstatusExecuted as i32, ..Default::default() }), ..Default::default() },
+        ];
+        let block = create_test_block(false, executed_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
+
+        let executed_traces: Vec<_> = block.executed_transaction_traces().collect();
+        assert_eq!(executed_traces, executed_traces);
+    }
+
+    #[test]
+    fn test_transaction_traces_count() {
+        let block = create_test_block(false, vec![], vec![], 8, 0, 5, 0, 7, 0);
+
+        assert_eq!(block.transaction_traces_count(), 8);
+    }
+
+    #[test]
+    fn test_executed_input_action_count() {
+        let block = create_test_block(false, vec![], vec![], 0, 0, 9, 0, 7, 0);
+
+        assert_eq!(block.executed_input_action_count(), 9);
+    }
+
+    #[test]
+    fn test_executed_total_action_count() {
+        let block = create_test_block(false, vec![], vec![], 0, 0, 5, 0, 11, 0);
+
+        assert_eq!(block.executed_total_action_count(), 11);
+    }
+}
