@@ -5,44 +5,45 @@ impl pb::Block {
     /// returns all transaction traces from the block.
     pub fn all_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
         if self.filtering_applied {
-            return self.filtered_transaction_traces.into_iter();
+            self.filtered_transaction_traces.into_iter()
+        } else {
+            self.unfiltered_transaction_traces.into_iter()
         }
-        self.unfiltered_transaction_traces.into_iter()
     }
 
     /// returns all transaction traces which have the status `executed`
     pub fn executed_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
-        return self
-            .all_transaction_traces()
-            .filter(|trx: &crate::TransactionTrace| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32);
+        self.all_transaction_traces()
+            .filter(|trx: &crate::TransactionTrace| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32)
     }
 
     /// returns the number of transaction traces included in this block
     pub fn transaction_traces_count(&self) -> u32 {
         if self.filtering_applied {
-            return self.filtered_transaction_count;
+            self.filtered_transaction_count
+        } else {
+            self.unfiltered_transaction_count
         }
-        self.unfiltered_transaction_count
     }
 
     /// Number of top-level actions that were successfully executed within this block.
     pub fn executed_input_action_count(&self) -> u32 {
         if self.filtering_applied {
-            return self.filtered_executed_input_action_count;
+            self.filtered_executed_input_action_count
+        } else {
+            self.unfiltered_executed_input_action_count
         }
-        self.unfiltered_executed_input_action_count
     }
 
     /// Number of actions that were successfully executed within this block.
     pub fn executed_total_action_count(&self) -> u32 {
         if self.filtering_applied {
-            return self.filtered_executed_total_action_count;
+            self.filtered_executed_total_action_count
+        } else {
+            self.unfiltered_executed_total_action_count
         }
-        self.unfiltered_executed_total_action_count
     }
-
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -78,8 +79,14 @@ mod tests {
     #[test]
     fn test_all_transaction_traces() {
         let unfiltered_traces = vec![
-            pb::TransactionTrace { id: String::from("trx1"), ..Default::default() },
-            pb::TransactionTrace { id: String::from("trx2"), ..Default::default() },
+            pb::TransactionTrace {
+                id: String::from("trx1"),
+                ..Default::default()
+            },
+            pb::TransactionTrace {
+                id: String::from("trx2"),
+                ..Default::default()
+            },
         ];
         let block = create_test_block(false, unfiltered_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
 
@@ -90,8 +97,22 @@ mod tests {
     #[test]
     fn test_executed_transaction_traces() {
         let executed_traces = vec![
-            pb::TransactionTrace { id: String::from("trx1"), receipt: Some(pb::TransactionReceiptHeader { status: TransactionstatusExecuted as i32, ..Default::default() }), ..Default::default() },
-            pb::TransactionTrace { id: String::from("trx2"), receipt: Some(pb::TransactionReceiptHeader { status: TransactionstatusExecuted as i32, ..Default::default() }), ..Default::default() },
+            pb::TransactionTrace {
+                id: String::from("trx1"),
+                receipt: Some(pb::TransactionReceiptHeader {
+                    status: TransactionstatusExecuted as i32,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            pb::TransactionTrace {
+                id: String::from("trx2"),
+                receipt: Some(pb::TransactionReceiptHeader {
+                    status: TransactionstatusExecuted as i32,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
         ];
         let block = create_test_block(false, executed_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
 

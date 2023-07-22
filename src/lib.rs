@@ -18,6 +18,7 @@
 
 /// Modules for generated protobuffer
 #[path = "pb/sf.antelope.type.v1.rs"]
+#[rustfmt::skip]
 #[allow(dead_code)]
 pub mod pb;
 pub use self::pb::*;
