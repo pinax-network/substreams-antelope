@@ -1,0 +1,9 @@
+pub type Asset = String;
+pub type Name = String;
+pub type Checksum256 = String;
+pub type Symbol = String;
+pub type SymbolCode = String;
+pub type TimePointSec = String;
+pub type Uint32 = u32;
+pub type Uint64 = u64;
+pub type Float64 = String;
