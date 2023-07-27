@@ -1,13 +1,14 @@
 use crate::pb::Action as ActionCall;
 // use serde::{Deserialize, Deserializer, Serialize};
 
+
 pub trait Action: Sized {
     const NAME: &'static str;
 
     fn match_call(action: &ActionCall) -> bool{
         action.name == Self::NAME
     }
-    fn decode(action: &ActionCall) -> Result<Self, String>;
+    fn decode(action: &ActionCall) -> Result<Self, crate::errors::Error>;
 
 
     /// Attempts to match and decode the action call.

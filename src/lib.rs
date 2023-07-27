@@ -27,3 +27,4 @@ pub use self::pb::*;
 pub mod block;
 pub mod action;
 pub mod types;
+pub mod errors;
