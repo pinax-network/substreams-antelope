@@ -2,8 +2,7 @@ use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer};
 
 pub fn decode<T: DeserializeOwned>(json_str: &str) -> Result<T, crate::errors::Error> {
-    serde_json::from_str::<T>(json_str)
-        .map_err(|_| crate::errors::Error::JsonDecodeError)
+    serde_json::from_str::<T>(json_str).map_err(|_| crate::errors::Error::JsonDecodeError)
 }
 
 pub fn str_or_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>

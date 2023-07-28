@@ -3,24 +3,20 @@ use crate::pb::ActionTrace;
 pub trait Action: Sized {
     const NAME: &'static str;
 
-    fn match_call(trace: &ActionTrace) -> bool{
+    fn match_call(trace: &ActionTrace) -> bool {
         trace.action.as_ref().unwrap().name == Self::NAME
     }
-    fn decode(action: &ActionTrace) -> Result<Self, crate::errors::Error>;
+    fn decode(trace: &ActionTrace) -> Result<Self, crate::errors::Error>;
 
-    fn match_and_decode(call: impl AsRef<ActionTrace>) -> Option<Self> {
-        let call = call.as_ref();
-        if !Self::match_call(call) {
+    fn match_and_decode(trace: impl AsRef<ActionTrace>) -> Option<Self> {
+        let trace = trace.as_ref();
+        if !Self::match_call(trace) {
             return None;
         }
-        match Self::decode(&call) {
+        match Self::decode(trace) {
             Ok(action) => Some(action),
             Err(err) => {
-                substreams::log::info!(
-                    "Call for action `{}` matched but failed to decode with error: {}",
-                    Self::NAME,
-                    err
-                );
+                substreams::log::info!("Call for action `{}` matched but failed to decode with error: {}", Self::NAME, err);
                 None
             }
         }

@@ -75,11 +75,7 @@ impl pb::Block {
     ///     })
     ///     .collect()
     /// ```
-    pub fn actions<'a, A: crate::action::Action> (
-        &'a self,
-        accounts: &'a [&str],
-    ) -> impl Iterator<Item = (A, &ActionTrace)> + 'a
-    {
+    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &ActionTrace)> + 'a {
         self.all_action_traces().filter_map(|trace| {
             if !accounts.contains(&trace.action.as_ref().unwrap().account.as_str()) {
                 return None;
@@ -144,23 +140,12 @@ mod tests {
         let unfiltered_traces = vec![
             pb::TransactionTrace {
                 id: String::from("trx1"),
-                action_traces: vec![
-                    pb::ActionTrace {
-                        ..Default::default()
-                    },
-                ],
+                action_traces: vec![pb::ActionTrace { ..Default::default() }],
                 ..Default::default()
             },
             pb::TransactionTrace {
                 id: String::from("trx2"),
-                action_traces: vec![
-                    pb::ActionTrace {
-                        ..Default::default()
-                    },
-                    pb::ActionTrace {
-                        ..Default::default()
-                    },
-                ],
+                action_traces: vec![pb::ActionTrace { ..Default::default() }, pb::ActionTrace { ..Default::default() }],
                 ..Default::default()
             },
         ];
