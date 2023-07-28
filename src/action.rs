@@ -1,6 +1,4 @@
 use crate::pb::Action as ActionCall;
-// use serde::{Deserialize, Deserializer, Serialize};
-
 
 pub trait Action: Sized {
     const NAME: &'static str;
@@ -10,17 +8,11 @@ pub trait Action: Sized {
     }
     fn decode(action: &ActionCall) -> Result<Self, crate::errors::Error>;
 
-
-    /// Attempts to match and decode the action call.
-    /// If `Self::match_call(call)` is `false`, returns `None`.
-    /// If it matches, but decoding fails, logs the decoding error and returns `None`.
     fn match_and_decode(call: impl AsRef<ActionCall>) -> Option<Self> {
         let call = call.as_ref();
         if !Self::match_call(call) {
             return None;
         }
-        substreams::log::info!("match_and_decode about to decode: {:?}", call);
-
         match Self::decode(&call) {
             Ok(action) => Some(action),
             Err(err) => {

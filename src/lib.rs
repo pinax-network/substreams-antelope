@@ -26,5 +26,6 @@ pub use self::pb::*;
 /// Modules Antelope Block
 pub mod block;
 pub mod action;
-pub mod types;
 pub mod errors;
+pub mod types;
+pub mod decoder;

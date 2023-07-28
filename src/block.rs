@@ -11,6 +11,11 @@ impl pb::Block {
         }
     }
 
+    /// returns all action traces from the block
+    pub fn all_action_traces(self) -> impl Iterator<Item = pb::ActionTrace> {
+        self.all_transaction_traces().flat_map(|trx| trx.action_traces)
+    }
+
     /// returns all transaction traces which have the status `executed`
     pub fn executed_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
         self.all_transaction_traces()
@@ -92,6 +97,37 @@ mod tests {
 
         let all_traces: Vec<_> = block.all_transaction_traces().collect();
         assert_eq!(all_traces, unfiltered_traces);
+    }
+
+    #[test]
+    fn test_all_action_traces() {
+        let unfiltered_traces = vec![
+            pb::TransactionTrace {
+                id: String::from("trx1"),
+                action_traces: vec![
+                    pb::ActionTrace {
+                        ..Default::default()
+                    },
+                ],
+                ..Default::default()
+            },
+            pb::TransactionTrace {
+                id: String::from("trx2"),
+                action_traces: vec![
+                    pb::ActionTrace {
+                        ..Default::default()
+                    },
+                    pb::ActionTrace {
+                        ..Default::default()
+                    },
+                ],
+                ..Default::default()
+            },
+        ];
+        let block = create_test_block(false, unfiltered_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
+
+        let all_traces: Vec<_> = block.all_action_traces().collect();
+        assert_eq!(all_traces.len(), 3);
     }
 
     #[test]
