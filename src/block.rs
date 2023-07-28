@@ -64,8 +64,7 @@ impl pb::Block {
     }
 
     /// returns all actions of a type from the block which match the given accounts
-    /// Example:
-    /// ```no_run
+    /// ```ignore
     /// let state_changes = block.actions::<abi::contract::actions::Statelog>(&["mycontract"])
     ///     .map(|(action, trx)| StateChange {
     ///         trx_id: trx.transaction_id.clone(),
@@ -73,7 +72,7 @@ impl pb::Block {
     ///         user: action.user,
     ///         state: action.status,
     ///     })
-    ///     .collect()
+    ///     .collect();
     /// ```
     pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &ActionTrace)> + 'a {
         self.all_action_traces().filter_map(|trace| {
