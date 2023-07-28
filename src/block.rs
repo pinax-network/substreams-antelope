@@ -1,9 +1,18 @@
 use crate::block::pb::TransactionStatus::TransactionstatusExecuted;
-use crate::pb;
+use crate::{pb, ActionTrace};
 
 impl pb::Block {
-    /// returns all transaction traces from the block.
-    pub fn all_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
+    /// returns all transaction traces from the block without consuming it.
+    pub fn all_transaction_traces(&self) -> impl Iterator<Item = &pb::TransactionTrace> {
+        if self.filtering_applied {
+            self.filtered_transaction_traces.iter()
+        } else {
+            self.unfiltered_transaction_traces.iter()
+        }
+    }
+
+    /// returns all transaction traces from the block and consumes it.
+    pub fn into_all_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
         if self.filtering_applied {
             self.filtered_transaction_traces.into_iter()
         } else {
@@ -11,15 +20,20 @@ impl pb::Block {
         }
     }
 
-    /// returns all action traces from the block
-    pub fn all_action_traces(self) -> impl Iterator<Item = pb::ActionTrace> {
-        self.all_transaction_traces().flat_map(|trx| trx.action_traces)
+    /// returns all action traces from the block without consuming it
+    pub fn all_action_traces(&self) -> impl Iterator<Item = &pb::ActionTrace> {
+        self.all_transaction_traces().flat_map(|trx| &trx.action_traces)
+    }
+
+    /// returns all action traces from the block and consumes it
+    pub fn into_all_action_traces(self) -> impl Iterator<Item = pb::ActionTrace> {
+        self.into_all_transaction_traces().flat_map(|trx| trx.action_traces)
     }
 
     /// returns all transaction traces which have the status `executed`
-    pub fn executed_transaction_traces(self) -> impl Iterator<Item = pb::TransactionTrace> {
+    pub fn executed_transaction_traces(&self) -> impl Iterator<Item = &pb::TransactionTrace> {
         self.all_transaction_traces()
-            .filter(|trx: &crate::TransactionTrace| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32)
+            .filter(|trx| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32)
     }
 
     /// returns the number of transaction traces included in this block
@@ -47,6 +61,32 @@ impl pb::Block {
         } else {
             self.unfiltered_executed_total_action_count
         }
+    }
+
+    /// returns all actions of a type from the block which match the given accounts
+    /// Example:
+    /// ```no_run
+    /// let state_changes = block.actions::<abi::contract::actions::Statelog>(&["mycontract"])
+    ///     .map(|(action, trx)| StateChange {
+    ///         trx_id: trx.transaction_id.clone(),
+    ///         trx_index: trx.action_ordinal,
+    ///         user: action.user,
+    ///         state: action.status,
+    ///     })
+    ///     .collect()
+    /// ```
+    pub fn actions<'a, A: crate::action::Action> (
+        &'a self,
+        accounts: &'a [&str],
+    ) -> impl Iterator<Item = (A, &ActionTrace)> + 'a
+    {
+        self.all_action_traces().filter_map(|trace| {
+            if !accounts.contains(&trace.action.as_ref().unwrap().account.as_str()) {
+                return None;
+            }
+
+            A::match_and_decode(trace).map(|action| (action, trace))
+        })
     }
 }
 
@@ -95,7 +135,7 @@ mod tests {
         ];
         let block = create_test_block(false, unfiltered_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
 
-        let all_traces: Vec<_> = block.all_transaction_traces().collect();
+        let all_traces: Vec<_> = block.into_all_transaction_traces().collect();
         assert_eq!(all_traces, unfiltered_traces);
     }
 
