@@ -1,18 +1,20 @@
 use heck::ToUpperCamelCase;
 use proc_macro2::{TokenStream, Span};
 use quote::quote;
+use super::abi::{ABIStruct, ABIType};
 
+#[derive(Debug, Clone)]
 pub struct Type {
     pub name: String,
     pub fields: Vec<Field>,
     pub is_used: bool,
 }
 
-impl From<&super::abi::ABIStruct> for Type {
-    fn from(abi_struct: &super::abi::ABIStruct) -> Self {
+impl From<ABIStruct> for Type {
+    fn from(abi_struct: ABIStruct) -> Self {
         Type {
-            name: abi_struct.name.to_string(),
-            fields: abi_struct.fields.iter().map(Field::from).collect(),
+            name: abi_struct.name,
+            fields: abi_struct.fields.into_iter().map(Field::from).collect(),
             is_used: false,
         }
     }
@@ -34,6 +36,7 @@ impl Type {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Field {
     pub name: String,
     pub ty: String,
@@ -43,8 +46,8 @@ pub struct Field {
 
 
 
-impl From<&super::abi::ABIType> for Field {
-    fn from(abi_type: &super::abi::ABIType) -> Self {
+impl From<ABIType> for Field {
+    fn from(abi_type: ABIType) -> Self {
         Field {
             name: abi_type.name.to_string(),
             ty: abi_type.ty.trim_end_matches("?").trim_end_matches("[]").to_string(),

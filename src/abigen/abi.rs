@@ -123,12 +123,11 @@ pub fn native_type_to_abi_type(tp: &str) -> &str {
         "SymbolCode" => "symbol_code",
         "Asset" => "asset",
         "ExtendedAsset" => "extended_asset",
-        "ExtendedSymbol" => "extended_symbol",
         _ => tp,
     }
 }
 
-pub fn is_buildin_type(name: &str) -> bool {
+pub fn is_intrinsic_abi_type(name: &str) -> bool {
     match name {
         "bool" | "i8" | "u8" | "i16" | "u16" | "i32" | "u32" | "i64" | "u64" | "f32" | "f64" | "i128" | "u128" |
         "String" |
@@ -214,7 +213,6 @@ pub fn rust_type(ty: &str) -> TokenStream {
         "symbol_code" => quote! { substreams_antelope::types::SymbolCode },
         "asset" => quote! { substreams_antelope::types::Asset },
         "extended_asset" => quote! { substreams_antelope::types::ExtendedAsset },
-        "extended_symbol" => quote! { substreams_antelope::types::ExtendedSymbol },
 
         _ => panic!("Unknown type: {}", ty),
     }

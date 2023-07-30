@@ -1,21 +1,22 @@
+use std::collections::HashMap;
+
 use proc_macro2::{TokenStream, Span};
 use quote::quote;
 
-use super::action::{Action, get_action_by_name};
+use super::action::{Action};
 use super::abi::ABI;
-use super::typ::Type;
+use super::ty::{Type, Field};
 
 pub struct Contract {
-    pub types: Vec<Type>,
+    pub types: HashMap<String, Type>,
     pub actions: Vec<Action>,
 }
-
 
 impl Contract {
     /// Generates rust interface for a contract.
     pub fn generate(&self) -> TokenStream {
-        let types: Vec<_> = self.types.iter().filter(|t| t.is_used).map(Type::generate).collect();
         let actions: Vec<_> = self.actions.iter().map(Action::generate).collect();
+        let types: Vec<_> = self.types.values().filter(|ty| ty.is_used).map(Type::generate).collect();
 
         quote! {
             /// Contract types
@@ -31,23 +32,42 @@ impl Contract {
 }
 
 
-impl<'a> From<&'a ABI> for Contract {
-    fn from(c: &'a ABI) -> Self {
-        let types: Vec<_> = c
-            .structs
-            .iter()
-            .map(Type::from)
-            .collect();
+// fn get_type_by_name<'a>(types: &'a Vec<Type>, name: String) -> Option<&'a Type> {
+//     types.iter().find(|t| t.name == name)
+// }
+impl From<ABI> for Contract {
+    fn from(abi: ABI) -> Self {
 
-        let actions: Vec<_> = c
+        let mut types = abi.structs.into_iter().fold(
+            HashMap::new(),
+            |mut acc, abi_struct| {
+                acc.insert(abi_struct.name.clone(), Type {
+                    name: abi_struct.name,
+                    fields: abi_struct.fields.into_iter().map(Field::from).collect(),
+                    is_used: false,
+                });
+                acc
+            },
+        );
+
+
+        let actions: Vec<Action> = abi
             .actions
-            .iter()
-            .map(|action| get_action_by_name(&c.structs, &action.name).unwrap())
+            .into_iter()
+            .map(|abi_action| {
+                if let Some(ty) = types.get_mut(&abi_action.ty) {
+                    ty.is_used = true;
+                }
+                Action {
+                    name: abi_action.name,
+                    ty: types[&abi_action.ty].clone(),
+                }
+            })
             .collect();
 
         Contract {
-            actions,
             types,
+            actions,
         }
     }
 }

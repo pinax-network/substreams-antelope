@@ -2,7 +2,7 @@ pub mod build;
 pub mod contract;
 pub mod action;
 pub mod abi;
-pub mod typ;
+pub mod ty;
 
 use std::{
     env, fs,
@@ -25,7 +25,7 @@ pub fn generate_abi_code<S: AsRef<str>>(
     reader.read_to_string(&mut contents)?;
 
     let contract = ABI::try_from(contents.as_str())?;
-    let c = contract::Contract::from(&contract);
+    let c = contract::Contract::from(contract);
     Ok(c.generate())
 }
 

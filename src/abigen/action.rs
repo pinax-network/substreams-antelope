@@ -4,29 +4,41 @@ use quote::quote;
 
 use crate::abigen::abi::{rust_type, is_reserved, custom_deserializer};
 
-use super::abi::ABIStruct;
-use super::typ::Field;
+use super::abi::{ABIStruct, ABIAction};
+use super::ty::{Field, Type};
 
 /// Structure used to generate contract's action interface.
+#[derive(Debug)]
 pub struct Action {
     pub name: String,
-    pub params: Vec<Field>,
+    pub ty: Type, // Action owns a Type
 }
 
+// impl From<ABIAction> for Action {
+//     fn from(abi_action: ABIAction) -> Self {
+//         Action {
+//             name: abi_action.name,
+//             ty: abi_action.ty,
+//         }
+//     }
+// }
+
 impl Action {
+
     /// Generates rust interface for contract's event.
     pub fn generate(&self) -> TokenStream {
         let name = &self.name;
         let camel_name = syn::Ident::new(&self.name.to_upper_camel_case(), Span::call_site());
-
         let types: Vec<_> = self
-            .params
+            .ty
+            .fields
             .iter()
             .map(|param| (&param.ty, rust_type(&param.ty)))
             .collect();
 
         let action_params: Vec<_> = self
-            .params
+            .ty
+            .fields
             .iter()
             .map(|param| {
                 if is_reserved(param.name.as_str()) {
@@ -64,21 +76,4 @@ impl Action {
             }
         }
     }
-}
-
-
-pub fn get_action_by_name(structs: &[ABIStruct], name: &str) -> Option<Action> {
-    structs
-        .iter()
-        .find(|item| item.name == name)
-        .map(|abi_struct| {
-            Action {
-                name: abi_struct.name.clone(),
-                params: abi_struct
-                    .fields
-                    .iter()
-                    .map(Field::from)
-                    .collect(),
-            }
-        })
 }
