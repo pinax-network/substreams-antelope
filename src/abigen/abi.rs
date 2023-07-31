@@ -1,13 +1,7 @@
 use heck::ToUpperCamelCase;
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
-
-use serde::{
-    // de::DeserializeOwned,
-    // de::Deserializer,
-    Deserialize,
-    Serialize,
-};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 
@@ -87,44 +81,6 @@ pub struct ABI {
     pub error_messages: Vec<ABIErrorMessage>,
     pub ricardian_clauses: Vec<ABIRicardianClause>,
     pub action_results: Vec<ABIActionResult>,
-}
-
-pub fn rust_type_to_abi_type(tp: &str) -> &str {
-    match tp {
-        "bool" => "bool",
-        "i8" => "int8",
-        "u8" => "uint8",
-        "i16" => "int16",
-        "u16" => "uint16",
-        "i32" => "int32",
-        "u32" => "uint32",
-        "i64" => "int64",
-        "u64" => "uint64",
-        "i128" => "int128",
-        "u128" => "uint128",
-        "Varint32" => "varint32",
-        "VarUint32" => "varuint32",
-        "f32" => "float32",
-        "f64" => "float64",
-        "Float128" => "float128",
-        "TimePoint" => "time_point",
-        "TimePointSec" => "time_point_sec",
-        "BlockTimeStampType" => "block_timestamp_type",
-        "Name" => "name",
-        "&[u8]" => "bytes",
-        "String" => "string",
-        "Checksum160" => "checksum160",
-        "Checksum256" => "checksum256",
-        "Uint256" => "checksum256",
-        "Checksum512" => "checksum512",
-        "PublicKey" => "public_key",
-        "Signature" => "signature",
-        "Symbol" => "symbol",
-        "SymbolCode" => "symbol_code",
-        "Asset" => "asset",
-        "ExtendedAsset" => "extended_asset",
-        _ => panic!("rust_type_to_abi_type(): unknown type {}", tp),
-    }
 }
 
 pub fn abi_type_to_rust_type(tp: &str) -> Option<&str> {
