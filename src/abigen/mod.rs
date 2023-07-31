@@ -1,11 +1,11 @@
 pub mod abi;
 pub mod action;
+pub mod assert;
 pub mod build;
 pub mod contract;
 pub mod field;
 pub mod rust;
 pub mod ty;
-pub mod assert;
 
 use anyhow::format_err;
 use std::{

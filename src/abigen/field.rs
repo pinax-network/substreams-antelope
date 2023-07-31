@@ -36,8 +36,8 @@ impl Field {
         };
         let ty_ident = syn::Ident::new(rust_type(self.ty.as_str()).as_str(), Span::call_site());
         let ty = match self.is_array {
-            true => quote!{ Vec<#ty_ident> },
-            false => quote!{  #ty_ident },
+            true => quote! { Vec<#ty_ident> },
+            false => quote! {  #ty_ident },
         };
 
         let rename = if is_reserved {
@@ -50,49 +50,60 @@ impl Field {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use quote::quote;
     use crate::abigen::abi::ABIType;
+    use quote::quote;
 
     #[test]
     fn test_all_fields() {
         let tests = [
-            ("bool", quote! { Bool }, quote!{ }),
-            ("int8", quote! { Int8 }, quote!{ }),
-            ("uint8", quote! { Uint8 }, quote!{ }),
-            ("int16", quote! { Int16 }, quote!{ }),
-            ("uint16", quote! { Uint16 }, quote!{ }),
-            ("int32", quote! { Int32 }, quote!{ }),
-            ("uint32", quote! { Uint32 }, quote!{ }),
-            ("int64", quote! { Int64 }, quote!{ #[serde(deserialize_with = "substreams_antelope::decoder::str_or_i64")] }),
-            ("uint64", quote! { Uint64 }, quote!{ #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")] }),
-            ("int128", quote! { Int128 }, quote!{ }),
-            ("uint128", quote! { Uint128 }, quote!{ }),
-            ("varint32", quote! { VarInt32 }, quote!{ }),
-            ("varuint32", quote! { VarUint32 }, quote!{ }),
-            ("float32", quote! { Float32 }, quote!{ }),
-            ("float64", quote! { Float64 }, quote!{ }),
-            ("float128", quote! { Float128 }, quote!{ }),
-            ("time_point", quote! { TimePoint }, quote!{ }),
-            ("time_point_sec", quote! { TimePointSec }, quote!{ }),
-            ("block_timestamp_type", quote! { BlockTimeStampType }, quote!{ }),
-            ("name", quote! { Name }, quote!{ }),
-            ("&[u8]", quote! { Bytes }, quote!{ }),
-            ("string", quote! { String }, quote!{ }),
-            ("checksum160", quote! { Checksum160 }, quote!{ }),
-            ("checksum256", quote! { Checksum256 }, quote!{ }),
-            ("checksum512", quote! { Checksum512 }, quote!{ }),
-            ("public_key", quote! { PublicKey }, quote!{ }),
-            ("signature", quote! { Signature }, quote!{ }),
-            ("symbol", quote! { Symbol }, quote!{ }),
-            ("symbol_code", quote! { SymbolCode }, quote!{ }),
-            ("asset", quote! { Asset }, quote!{ }),
-            ("extended_asset", quote! { ExtendedAsset }, quote!{ }),
-            ("name[]", quote! { Vec<Name> }, quote!{ }),
-            ("uint64[]", quote! { Vec<Uint64> }, quote!{ #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")] }),
+            ("bool", quote! { Bool }, quote! {}),
+            ("int8", quote! { Int8 }, quote! {}),
+            ("uint8", quote! { Uint8 }, quote! {}),
+            ("int16", quote! { Int16 }, quote! {}),
+            ("uint16", quote! { Uint16 }, quote! {}),
+            ("int32", quote! { Int32 }, quote! {}),
+            ("uint32", quote! { Uint32 }, quote! {}),
+            (
+                "int64",
+                quote! { Int64 },
+                quote! { #[serde(deserialize_with = "substreams_antelope::decoder::str_or_i64")] },
+            ),
+            (
+                "uint64",
+                quote! { Uint64 },
+                quote! { #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")] },
+            ),
+            ("int128", quote! { Int128 }, quote! {}),
+            ("uint128", quote! { Uint128 }, quote! {}),
+            ("varint32", quote! { VarInt32 }, quote! {}),
+            ("varuint32", quote! { VarUint32 }, quote! {}),
+            ("float32", quote! { Float32 }, quote! {}),
+            ("float64", quote! { Float64 }, quote! {}),
+            ("float128", quote! { Float128 }, quote! {}),
+            ("time_point", quote! { TimePoint }, quote! {}),
+            ("time_point_sec", quote! { TimePointSec }, quote! {}),
+            ("block_timestamp_type", quote! { BlockTimeStampType }, quote! {}),
+            ("name", quote! { Name }, quote! {}),
+            ("&[u8]", quote! { Bytes }, quote! {}),
+            ("string", quote! { String }, quote! {}),
+            ("checksum160", quote! { Checksum160 }, quote! {}),
+            ("checksum256", quote! { Checksum256 }, quote! {}),
+            ("checksum512", quote! { Checksum512 }, quote! {}),
+            ("public_key", quote! { PublicKey }, quote! {}),
+            ("signature", quote! { Signature }, quote! {}),
+            ("symbol", quote! { Symbol }, quote! {}),
+            ("symbol_code", quote! { SymbolCode }, quote! {}),
+            ("asset", quote! { Asset }, quote! {}),
+            ("extended_asset", quote! { ExtendedAsset }, quote! {}),
+            ("name[]", quote! { Vec<Name> }, quote! {}),
+            (
+                "uint64[]",
+                quote! { Vec<Uint64> },
+                quote! { #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")] },
+            ),
         ];
 
         for (abi_type, rs_type, deserializer) in &tests {
@@ -120,5 +131,4 @@ mod tests {
 
         assert_eq!(generated_tokens.to_string(), expected_tokens.to_string());
     }
-
 }

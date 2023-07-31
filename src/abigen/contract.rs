@@ -37,14 +37,12 @@ impl From<ABI> for Contract {
         let actions: Vec<Action> = abi
             .actions
             .into_iter()
-            .map(|abi_action| {
-                match types.iter_mut().find(|ty|abi_action.ty == ty.name) {
-                    Some(ty) => {
-                        ty.is_entity = true;
-                        Action::from((abi_action.name, ty.clone()))
-                    }
-                    None => panic!("No type found for action {}", abi_action.name)
+            .map(|abi_action| match types.iter_mut().find(|ty| abi_action.ty == ty.name) {
+                Some(ty) => {
+                    ty.is_entity = true;
+                    Action::from((abi_action.name, ty.clone()))
                 }
+                None => panic!("No type found for action {}", abi_action.name),
             })
             .collect();
 
@@ -54,8 +52,8 @@ impl From<ABI> for Contract {
 
 #[cfg(test)]
 mod test {
+    use crate::abigen::{abi::ABI, assert::assert_ast_eq};
     use quote::quote;
-    use crate::abigen::{assert::assert_ast_eq, abi::ABI};
 
     use super::Contract;
 
@@ -85,13 +83,9 @@ mod test {
         );
     }
 
-
     #[test]
     fn test_token() {
-        let abi_contract = Contract {
-            ..Default::default()
-        };
-
+        let abi_contract = Contract { ..Default::default() };
 
         let c = Contract::from(abi_contract);
 

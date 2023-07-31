@@ -4,7 +4,7 @@ use quote::quote;
 
 use super::ty::Type;
 
-#[derive(Debug, Clone,)]
+#[derive(Debug, Clone)]
 pub struct Action {
     pub name: String,
     pub ty: Type,
