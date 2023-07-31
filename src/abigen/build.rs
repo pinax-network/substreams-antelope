@@ -21,8 +21,7 @@ impl Abigen {
     }
 
     pub fn generate(&self) -> Result<GeneratedBindings, anyhow::Error> {
-        let item =
-            generate_abi_code(self.abi_path.to_string_lossy()).context("generating abi code")?;
+        let item = generate_abi_code(self.abi_path.to_string_lossy()).context("generating abi code")?;
 
         // FIXME: We wrap into a fake module because `syn::parse2(file)` doesn't like it when there is
         // no wrapping statement. Below that we remove the first and last line of the generated code
@@ -61,11 +60,9 @@ impl GeneratedBindings {
         let path = normalize_path(p.as_ref()).context("normalize path")?;
 
         if let Some(parent) = path.parent() {
-            std::fs::create_dir_all(parent)
-                .with_context(|| format!("creating directories for {}", parent.to_string_lossy()))?
+            std::fs::create_dir_all(parent).with_context(|| format!("creating directories for {}", parent.to_string_lossy()))?
         }
 
-        std::fs::write(path, &self.code)
-            .with_context(|| format!("writing file {}", p.as_ref().to_string_lossy()))
+        std::fs::write(path, &self.code).with_context(|| format!("writing file {}", p.as_ref().to_string_lossy()))
     }
 }
