@@ -22,7 +22,7 @@ impl Abigen {
     pub fn generate(&self) -> Result<GeneratedBindings, anyhow::Error> {
         let item = generate_abi_code(self.abi_path.to_string_lossy()).context("generating abi code")?;
 
-        let file = syn::parse_file(&item.to_string()).unwrap();
+        let file = syn::parse_file(&item.to_string()).context("parsing generated code")?;
 
         let code = prettyplease::unparse(&file).lines().collect::<Vec<_>>().join("\n");
 
