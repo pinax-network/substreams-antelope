@@ -17,9 +17,12 @@ impl Contract {
 
         quote! {
             pub mod types {
+                use substreams_antelope::types::*;
                 #(#types)*
             }
             pub mod actions {
+                use substreams_antelope::types::*;
+                use super::types::*;
                 #(#actions)*
             }
         }

@@ -151,7 +151,7 @@ pub fn is_reserved(id: &str) -> bool {
 
 pub fn rust_type(ty: &str) -> String {
     match abi_type_to_rust_type(ty) {
-        Some(ty) => format!("substreams_antelope::types::{}", ty),
-        _ => format!("super::types::{}", ty.to_string().to_upper_camel_case()),
+        Some(ty) => ty.to_string(),
+        _ => ty.to_string().to_upper_camel_case(),
     }
 }
