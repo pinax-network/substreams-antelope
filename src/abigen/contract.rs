@@ -1,7 +1,6 @@
-use std::collections::HashMap;
-
 use proc_macro2::TokenStream;
 use quote::quote;
+use std::collections::HashMap;
 
 use super::abi::ABI;
 use super::action::Action;

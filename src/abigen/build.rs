@@ -1,12 +1,11 @@
+use anyhow::Context;
 use std::path::{Path, PathBuf};
 
-use crate::abigen::{generate_abi_code, normalize_path};
-use anyhow::Context;
-use quote::quote;
+use super::{generate_abi_code, normalize_path};
 
 #[derive(Debug, Clone)]
 pub struct Abigen {
-    /// The path where to fin the source of the ABI JSON for the contract whose bindings
+    /// The path where to find the source of the ABI JSON for the contract whose bindings
     /// are being generated.
     abi_path: PathBuf,
 }
@@ -23,31 +22,11 @@ impl Abigen {
     pub fn generate(&self) -> Result<GeneratedBindings, anyhow::Error> {
         let item = generate_abi_code(self.abi_path.to_string_lossy()).context("generating abi code")?;
 
-        // FIXME: We wrap into a fake module because `syn::parse2(file)` doesn't like it when there is
-        // no wrapping statement. Below that we remove the first and last line of the generated code
-        // which fixes the problem.
-        //
-        // There is probably a way to avoid that somehow?
-        let file = quote! {
-            mod __remove__ {
-                #item
-            }
-        };
+        let file = syn::parse_file(&item.to_string()).unwrap();
 
-        let file = syn::File {
-            attrs: vec![],
-            items: vec![syn::parse2(file).context("parsing generated code")?],
-            shebang: None,
-        };
+        let code = prettyplease::unparse(&file).lines().collect::<Vec<_>>().join("\n");
 
-        let code = prettyplease::unparse(&file);
-        let mut lines = code.lines();
-        lines.next();
-        lines.next_back();
-
-        Ok(GeneratedBindings {
-            code: lines.collect::<Vec<_>>().join("\n"),
-        })
+        Ok(GeneratedBindings { code })
     }
 }
 

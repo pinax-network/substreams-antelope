@@ -2,9 +2,10 @@ pub mod abi;
 pub mod action;
 pub mod build;
 pub mod contract;
+pub mod field;
+pub mod rust;
 pub mod ty;
 
-use crate::errors::Error;
 use anyhow::format_err;
 use std::{
     env, fs,
@@ -12,7 +13,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use self::abi::ABI;
+use super::errors::Error;
+use abi::ABI;
 
 pub fn generate_abi_code<S: AsRef<str>>(path: S) -> Result<proc_macro2::TokenStream, anyhow::Error> {
     let normalized_path = normalize_path(path.as_ref())?;
