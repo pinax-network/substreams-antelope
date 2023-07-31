@@ -71,10 +71,15 @@ pub struct ABI {
     pub structs: Vec<ABIStruct>,
     pub actions: Vec<ABIAction>,
     pub tables: Vec<ABITable>,
+    #[serde(default)]
     pub variants: Vec<ABIVariant>,
+    #[serde(default)]
     pub abi_extensions: Vec<String>,
+    #[serde(default)]
     pub error_messages: Vec<ABIErrorMessage>,
+    #[serde(default)]
     pub ricardian_clauses: Vec<ABIRicardianClause>,
+    #[serde(default)]
     pub action_results: Vec<ABIActionResult>,
 }
 

@@ -5,6 +5,7 @@ use super::abi::ABI;
 use super::action::Action;
 use super::ty::Type;
 
+#[derive(Debug, Clone, Default)]
 pub struct Contract {
     pub types: Vec<Type>,
     pub actions: Vec<Action>,
@@ -48,5 +49,63 @@ impl From<ABI> for Contract {
             .collect();
 
         Contract { types, actions }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use quote::quote;
+    use crate::abigen::{assert::assert_ast_eq, abi::ABI};
+
+    use super::Contract;
+
+    #[test]
+    fn test_empty() {
+        let abi_json = r#"{
+            "version": "eosio::abi/1.2",
+            "types": [],
+            "structs": [],
+            "actions": [],
+            "tables": []
+        }"#;
+        let abi_contract = ABI::try_from(abi_json).expect("failed to load ABI from JSON");
+        let c = Contract::from(abi_contract);
+
+        assert_ast_eq(
+            c.generate(),
+            quote! {
+                pub mod types {
+                    use substreams_antelope::types::*;
+                }
+                pub mod actions {
+                    use substreams_antelope::types::*;
+                    use super::types::*;
+                }
+            },
+        );
+    }
+
+
+    #[test]
+    fn test_token() {
+        let abi_contract = Contract {
+            ..Default::default()
+        };
+
+
+        let c = Contract::from(abi_contract);
+
+        assert_ast_eq(
+            c.generate(),
+            quote! {
+                pub mod types {
+                    use substreams_antelope::types::*;
+                }
+                pub mod actions {
+                    use substreams_antelope::types::*;
+                    use super::types::*;
+                }
+            },
+        );
     }
 }

@@ -44,4 +44,7 @@ impl GeneratedBindings {
 
         std::fs::write(path, &self.code).with_context(|| format!("writing file {}", p.as_ref().to_string_lossy()))
     }
+    pub fn get_code(&self) -> &str {
+        self.code.as_str()
+    }
 }
