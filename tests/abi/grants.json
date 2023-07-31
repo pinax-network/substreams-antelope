@@ -1,0 +1,631 @@
+{
+    "version": "eosio::abi/1.2",
+    "types": [],
+    "structs": [{
+        "name": "cleartable",
+        "base": "",
+        "fields": [{
+            "name": "table_name",
+            "type": "name"
+          },{
+            "name": "round_id",
+            "type": "uint16?"
+          },{
+            "name": "max_rows",
+            "type": "uint64?"
+          }
+        ]
+      },{
+        "name": "collapse",
+        "base": "",
+        "fields": [{
+            "name": "user_ids",
+            "type": "name[]"
+          },{
+            "name": "user_id",
+            "type": "name"
+          },{
+            "name": "round_id",
+            "type": "uint16"
+          }
+        ]
+      },{
+        "name": "contribution_t",
+        "base": "",
+        "fields": [{
+            "name": "id",
+            "type": "name"
+          },{
+            "name": "value",
+            "type": "float64"
+          }
+        ]
+      },{
+        "name": "deltoken",
+        "base": "",
+        "fields": [{
+            "name": "symcode",
+            "type": "symbol_code"
+          }
+        ]
+      },{
+        "name": "globals_row",
+        "base": "",
+        "fields": [{
+            "name": "season_id",
+            "type": "uint16"
+          },{
+            "name": "grant_fee",
+            "type": "uint64"
+          },{
+            "name": "bounty_fee",
+            "type": "uint64"
+          },{
+            "name": "login_contract",
+            "type": "name"
+          },{
+            "name": "fee_account",
+            "type": "name"
+          }
+        ]
+      },{
+        "name": "grants_row",
+        "base": "",
+        "fields": [{
+            "name": "id",
+            "type": "name"
+          },{
+            "name": "type",
+            "type": "name"
+          },{
+            "name": "author_user_id",
+            "type": "name"
+          },{
+            "name": "funding_account",
+            "type": "name"
+          },{
+            "name": "accepted_tokens",
+            "type": "symbol_code[]"
+          },{
+            "name": "status",
+            "type": "name"
+          },{
+            "name": "created_at",
+            "type": "time_point_sec"
+          },{
+            "name": "updated_at",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "joinround",
+        "base": "",
+        "fields": [{
+            "name": "grant_id",
+            "type": "name"
+          },{
+            "name": "round_id",
+            "type": "uint16"
+          }
+        ]
+      },{
+        "name": "match_row",
+        "base": "",
+        "fields": [{
+            "name": "grant_id",
+            "type": "name"
+          },{
+            "name": "round_id",
+            "type": "uint16"
+          },{
+            "name": "total_users",
+            "type": "uint64"
+          },{
+            "name": "sum_value",
+            "type": "float64"
+          },{
+            "name": "sum_boost",
+            "type": "float64"
+          },{
+            "name": "sum_sqrt",
+            "type": "float64"
+          },{
+            "name": "square",
+            "type": "float64"
+          },{
+            "name": "updated_at",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "removeuser",
+        "base": "",
+        "fields": [{
+            "name": "user_ids",
+            "type": "name[]"
+          },{
+            "name": "round_id",
+            "type": "uint16"
+          }
+        ]
+      },{
+        "name": "rounds_row",
+        "base": "",
+        "fields": [{
+            "name": "round_id",
+            "type": "uint16"
+          },{
+            "name": "description",
+            "type": "string"
+          },{
+            "name": "season_id",
+            "type": "uint16"
+          },{
+            "name": "grant_ids",
+            "type": "name[]"
+          },{
+            "name": "user_ids",
+            "type": "name[]"
+          },{
+            "name": "donated_tokens",
+            "type": "extended_asset[]"
+          },{
+            "name": "match_value",
+            "type": "float64"
+          },{
+            "name": "sum_value",
+            "type": "float64"
+          },{
+            "name": "sum_boost",
+            "type": "float64"
+          },{
+            "name": "sum_square",
+            "type": "float64"
+          },{
+            "name": "created_at",
+            "type": "time_point_sec"
+          },{
+            "name": "updated_at",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "seasons_row",
+        "base": "",
+        "fields": [{
+            "name": "season_id",
+            "type": "uint16"
+          },{
+            "name": "description",
+            "type": "string"
+          },{
+            "name": "round_ids",
+            "type": "uint16[]"
+          },{
+            "name": "match_value",
+            "type": "float64"
+          },{
+            "name": "start_at",
+            "type": "time_point_sec"
+          },{
+            "name": "end_at",
+            "type": "time_point_sec"
+          },{
+            "name": "submission_start_at",
+            "type": "time_point_sec"
+          },{
+            "name": "submission_end_at",
+            "type": "time_point_sec"
+          },{
+            "name": "created_at",
+            "type": "time_point_sec"
+          },{
+            "name": "updated_at",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "setconfig",
+        "base": "",
+        "fields": [{
+            "name": "season_id",
+            "type": "uint16?"
+          },{
+            "name": "grant_fee",
+            "type": "uint64?"
+          },{
+            "name": "bounty_fee",
+            "type": "uint64?"
+          },{
+            "name": "login_contract",
+            "type": "name?"
+          },{
+            "name": "fee_account",
+            "type": "name?"
+          }
+        ]
+      },{
+        "name": "setfunding",
+        "base": "",
+        "fields": [{
+            "name": "grant_id",
+            "type": "name"
+          },{
+            "name": "user_id",
+            "type": "name"
+          }
+        ]
+      },{
+        "name": "setgrant",
+        "base": "",
+        "fields": [{
+            "name": "author_id",
+            "type": "name"
+          },{
+            "name": "project_id",
+            "type": "name"
+          },{
+            "name": "funding_account",
+            "type": "name"
+          },{
+            "name": "accepted_tokens",
+            "type": "symbol_code[]"
+          }
+        ]
+      },{
+        "name": "setgrantid",
+        "base": "",
+        "fields": [{
+            "name": "grant_id",
+            "type": "name"
+          },{
+            "name": "new_grant_id",
+            "type": "name"
+          }
+        ]
+      },{
+        "name": "setproject",
+        "base": "",
+        "fields": [{
+            "name": "author_id",
+            "type": "name"
+          },{
+            "name": "project_type",
+            "type": "name"
+          },{
+            "name": "project_id",
+            "type": "name"
+          },{
+            "name": "funding_account",
+            "type": "name"
+          },{
+            "name": "accepted_tokens",
+            "type": "symbol_code[]"
+          }
+        ]
+      },{
+        "name": "setround",
+        "base": "",
+        "fields": [{
+            "name": "round_id",
+            "type": "uint16"
+          },{
+            "name": "season_id",
+            "type": "uint16"
+          },{
+            "name": "description",
+            "type": "string?"
+          },{
+            "name": "match_value",
+            "type": "float64?"
+          }
+        ]
+      },{
+        "name": "setseason",
+        "base": "",
+        "fields": [{
+            "name": "season_id",
+            "type": "uint16"
+          },{
+            "name": "start_at",
+            "type": "time_point_sec?"
+          },{
+            "name": "end_at",
+            "type": "time_point_sec?"
+          },{
+            "name": "submission_start_at",
+            "type": "time_point_sec?"
+          },{
+            "name": "submission_end_at",
+            "type": "time_point_sec?"
+          },{
+            "name": "description",
+            "type": "string?"
+          },{
+            "name": "match_value",
+            "type": "float64?"
+          }
+        ]
+      },{
+        "name": "setstate",
+        "base": "",
+        "fields": [{
+            "name": "project_id",
+            "type": "name"
+          },{
+            "name": "state",
+            "type": "name"
+          }
+        ]
+      },{
+        "name": "status_row",
+        "base": "",
+        "fields": [{
+            "name": "counters",
+            "type": "uint32[]"
+          },{
+            "name": "last_updated",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "token",
+        "base": "",
+        "fields": [{
+            "name": "sym",
+            "type": "symbol"
+          },{
+            "name": "contract",
+            "type": "name"
+          },{
+            "name": "min_amount",
+            "type": "uint64"
+          },{
+            "name": "oracle_contract",
+            "type": "name"
+          },{
+            "name": "oracle_id",
+            "type": "uint64"
+          }
+        ]
+      },{
+        "name": "tokens_row",
+        "base": "",
+        "fields": [{
+            "name": "sym",
+            "type": "symbol"
+          },{
+            "name": "contract",
+            "type": "name"
+          },{
+            "name": "min_amount",
+            "type": "uint64"
+          },{
+            "name": "oracle_contract",
+            "type": "name"
+          },{
+            "name": "oracle_id",
+            "type": "uint64"
+          }
+        ]
+      },{
+        "name": "transfers_row",
+        "base": "",
+        "fields": [{
+            "name": "transfer_id",
+            "type": "uint64"
+          },{
+            "name": "from",
+            "type": "name"
+          },{
+            "name": "to",
+            "type": "name"
+          },{
+            "name": "ext_quantity",
+            "type": "extended_asset"
+          },{
+            "name": "fee",
+            "type": "asset"
+          },{
+            "name": "memo",
+            "type": "string"
+          },{
+            "name": "user_id",
+            "type": "name"
+          },{
+            "name": "season_id",
+            "type": "uint16"
+          },{
+            "name": "round_id",
+            "type": "uint16"
+          },{
+            "name": "project_type",
+            "type": "name"
+          },{
+            "name": "project_id",
+            "type": "name"
+          },{
+            "name": "value",
+            "type": "float64"
+          },{
+            "name": "trx_id",
+            "type": "checksum256"
+          },{
+            "name": "created_at",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "unjoinround",
+        "base": "",
+        "fields": [{
+            "name": "grant_id",
+            "type": "name"
+          },{
+            "name": "round_id",
+            "type": "uint16"
+          }
+        ]
+      },{
+        "name": "users_row",
+        "base": "",
+        "fields": [{
+            "name": "user_id",
+            "type": "name"
+          },{
+            "name": "multiplier",
+            "type": "float64"
+          },{
+            "name": "value",
+            "type": "float64"
+          },{
+            "name": "boost",
+            "type": "float64"
+          },{
+            "name": "contributions",
+            "type": "contribution_t[]"
+          },{
+            "name": "updated_at",
+            "type": "time_point_sec"
+          }
+        ]
+      },{
+        "name": "value",
+        "base": "",
+        "fields": [{
+            "name": "in",
+            "type": "extended_asset"
+          }
+        ]
+      }
+    ],
+    "actions": [{
+        "name": "cleartable",
+        "type": "cleartable",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: cleartable\nsummary: Clear table\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "collapse",
+        "type": "collapse",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: collapse\nsummary: Collapse users and their donations\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "deltoken",
+        "type": "deltoken",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: deltoken\nsummary: Delete token\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "joinround",
+        "type": "joinround",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: joinround\nsummary: Join round\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "removeuser",
+        "type": "removeuser",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: removeuser\nsummary: Remove user\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setconfig",
+        "type": "setconfig",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: init\nsummary: Set config parameter\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setfunding",
+        "type": "setfunding",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: setfunding\nsummary: Set funding account\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setgrant",
+        "type": "setgrant",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: setproject\nsummary: Set grant\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setgrantid",
+        "type": "setgrantid",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: setgrantid\nsummary: Set grant ID\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setproject",
+        "type": "setproject",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: setproject\nsummary: Set project (grant/bounty)\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setround",
+        "type": "setround",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: setround\nsummary: Set round\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setseason",
+        "type": "setseason",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: init\nsummary: Set season parameters\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "setstate",
+        "type": "setstate",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: setstate\nsummary: Set project state\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "token",
+        "type": "token",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: token\nsummary: Set token information\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "unjoinround",
+        "type": "unjoinround",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: unjoinround\nsummary: Exclude grant from round\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      },{
+        "name": "value",
+        "type": "value",
+        "ricardian_contract": "---\nspec_version: \"0.2.0\"\ntitle: value\nsummary: Get donation value equivalent\nicon: https://avatars.githubusercontent.com/u/83723501#b74cf8b3d884f42fffea4bfe7070b3871e1845805c57973a48324af1228ad9cc\n---"
+      }
+    ],
+    "tables": [{
+        "name": "globals",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "globals_row"
+      },{
+        "name": "grants",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "grants_row"
+      },{
+        "name": "match",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "match_row"
+      },{
+        "name": "rounds",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "rounds_row"
+      },{
+        "name": "seasons",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "seasons_row"
+      },{
+        "name": "status",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "status_row"
+      },{
+        "name": "tokens",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "tokens_row"
+      },{
+        "name": "transfers",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "transfers_row"
+      },{
+        "name": "users",
+        "index_type": "i64",
+        "key_names": [],
+        "key_types": [],
+        "type": "users_row"
+      }
+    ],
+    "ricardian_clauses": [],
+    "error_messages": [],
+    "abi_extensions": [],
+    "variants": [],
+    "action_results": [],
+    "kv_tables": {}
+  }
+  
