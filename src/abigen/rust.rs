@@ -1,6 +1,4 @@
 use heck::ToUpperCamelCase;
-use proc_macro2::{Span, TokenStream};
-use quote::quote;
 
 pub fn abi_type_to_rust_type(tp: &str) -> Option<&str> {
     Some(match tp {
@@ -151,45 +149,9 @@ pub fn is_reserved(id: &str) -> bool {
     RESERVED.contains(&id)
 }
 
-pub fn rust_type(ty: &str) -> TokenStream {
-    if abi_type_to_rust_type(ty).is_none() {
-        let ty = ty.to_string().to_upper_camel_case();
-        let ty = syn::Ident::new(ty.as_str(), Span::call_site());
-        return quote! { super::types::#ty };
-    }
-    match ty {
-        "bool" => quote! { substreams_antelope::types::Bool },
-        "int8" => quote! { substreams_antelope::types::Int8 },
-        "uint8" => quote! { substreams_antelope::types::Uint8 },
-        "int16" => quote! { substreams_antelope::types::Int16 },
-        "uint16" => quote! { substreams_antelope::types::Uint16 },
-        "int32" => quote! { substreams_antelope::types::Int32 },
-        "uint32" => quote! { substreams_antelope::types::Uint32 },
-        "int64" => quote! { substreams_antelope::types::Int64 },
-        "uint64" => quote! { substreams_antelope::types::Uint64 },
-        "int128" => quote! { substreams_antelope::types::Int128 },
-        "uint128" => quote! { substreams_antelope::types::Uint128 },
-        "varint32" => quote! { substreams_antelope::types::VarInt32 },
-        "varuint32" => quote! { substreams_antelope::types::VarUint32 },
-        "float32" => quote! { substreams_antelope::types::Float32 },
-        "float64" => quote! { substreams_antelope::types::Float64 },
-        "float128" => quote! { substreams_antelope::types::Float128 },
-        "time_point" => quote! { substreams_antelope::types::TimePoint },
-        "time_point_sec" => quote! { substreams_antelope::types::TimePointSec },
-        "block_timestamp_type" => quote! { substreams_antelope::types::BlockTimeStampType },
-        "name" => quote! { substreams_antelope::types::Name },
-        "bytes" => quote! { substreams_antelope::types::Bytes },
-        "string" => quote! { substreams_antelope::types::String },
-        "checksum160" => quote! { substreams_antelope::types::Checksum160 },
-        "checksum256" => quote! { substreams_antelope::types::Checksum256 },
-        "checksum512" => quote! { substreams_antelope::types::Checksum512 },
-        "public_key" => quote! { substreams_antelope::types::PublicKey },
-        "signature" => quote! { substreams_antelope::types::Signature },
-        "symbol" => quote! { substreams_antelope::types::Symbol },
-        "symbol_code" => quote! { substreams_antelope::types::SymbolCode },
-        "asset" => quote! { substreams_antelope::types::Asset },
-        "extended_asset" => quote! { substreams_antelope::types::ExtendedAsset },
-
-        _ => panic!("rust_type(): unknown type: {}", ty),
+pub fn rust_type(ty: &str) -> String {
+    match abi_type_to_rust_type(ty) {
+        Some(ty) => format!("substreams_antelope::types::{}", ty),
+        _ => format!("super::types::{}", ty.to_string().to_upper_camel_case()),
     }
 }

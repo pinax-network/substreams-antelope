@@ -34,7 +34,13 @@ impl Field {
             Some(de) => quote! { #[serde(deserialize_with = #de)] },
             None => quote! {},
         };
-        let ty = rust_type(&self.ty);
+        let ty = rust_type(self.ty.as_str());
+        let ty_idents = ty.split("::").map(|s| syn::Ident::new(s, Span::call_site())).collect::<Vec<_>>();
+        let ty = match self.is_array {
+            true => quote!{ Vec<#(#ty_idents)::*> },
+            false => quote!{  #(#ty_idents)::* },
+        };
+
         let rename = if is_reserved {
             let ty = self.name.as_str();
             quote! { #[serde(rename = #ty)] }
