@@ -102,7 +102,7 @@ mod tests {
             (
                 "uint64[]",
                 quote! { Vec<Uint64> },
-                quote! { #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")] },
+                quote! { #[serde(deserialize_with = "substreams_antelope::decoder::vec_str_or_u64")] },
             ),
         ];
 
