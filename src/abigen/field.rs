@@ -30,7 +30,7 @@ impl Field {
         } else {
             (syn::Ident::new(self.name.as_str(), Span::call_site()), false)
         };
-        let deserializer = match custom_deserializer(self.ty.as_str()) {
+        let deserializer = match custom_deserializer(self.ty.as_str(), self.is_array, self.is_optional) {
             Some(de) => quote! { #[serde(deserialize_with = #de)] },
             None => quote! {},
         };

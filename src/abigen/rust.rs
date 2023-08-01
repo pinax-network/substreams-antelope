@@ -37,10 +37,12 @@ pub fn abi_type_to_rust_type(tp: &str) -> Option<&str> {
     })
 }
 
-pub fn custom_deserializer(ty: &str) -> Option<String> {
-    let de = match ty {
-        "uint64" => "substreams_antelope::decoder::str_or_u64".to_string(),
-        "int64" => "substreams_antelope::decoder::str_or_i64".to_string(),
+pub fn custom_deserializer(ty: &str, is_array: bool, is_optional: bool) -> Option<String> {
+    let de = match (ty, is_array, is_optional) {
+        ("uint64", false, _) => "substreams_antelope::decoder::str_or_u64".to_string(),
+        ("int64", false, _) => "substreams_antelope::decoder::str_or_i64".to_string(),
+        ("uint64", true, _) => "substreams_antelope::decoder::vec_str_or_u64".to_string(),
+        ("int64", true, _) => "substreams_antelope::decoder::vec_str_or_i64".to_string(),
         _ => return None,
     };
     Some(de)
