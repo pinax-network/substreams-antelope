@@ -86,14 +86,12 @@ To generate ABI bindings for your smart contract you can add `abi/contract.abi.j
 **build.rs**
 
 ```rust
-use anyhow::{Ok, Result};
-use substreams_ethereum::Abigen;
-
-fn main() -> Result<(), anyhow::Error> {
-    Abigen::new("Contract", "abi/contract.abi.json")?
-        .generate()?
-        .write_to_file("src/abi/contract.rs")?;
-
-    Ok(())
+fn main() {
+    substreams_antelope::Abigen::new("Contract", "abi/gems.blend.abi.json")
+        .expect("failed to load abi")
+        .generate()
+        .expect("failed to generate contract")
+        .write_to_file("src/abi/gems.blend.abi.rs")
+        .expect("failed to write contract");
 }
 ```
