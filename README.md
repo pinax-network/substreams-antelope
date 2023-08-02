@@ -24,6 +24,7 @@
     - [x] transaction_traces_count
     - [x] executed_input_action_count
     - [x] executed_total_action_count
+    - [x] actions()
 
 ## Install
 
@@ -58,5 +59,39 @@ fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
         }
     }
     Ok(ActionTraces { action_traces })
+}
+```
+
+Or, using `actions()` filter to filter all actions of `Statelog` type from `myaccount` account:
+
+**src/lib.rs**
+
+```rust
+#[substreams::handlers::map]
+fn map_actions(param_account: String, block: substreams_antelope::Block) -> Result<Actions, substreams::errors::Error> {
+    Ok(Actions {
+        statelogs: block.actions::<abi::contract::actions::Statelog>(&["myaccount"])
+            .map(|(action, trx)| StateLog {
+                // set action fields
+            })
+            .collect(),
+    })
+}
+```
+
+
+## Using Abigen
+To generate ABI bindings for your smart contract you can add `abi/contract.abi.json` file containing the smart contract ABI, as well as the following `build.rs` file to the root of your project, to make sure `src/abi/contract.rs` is always generated in your project:
+
+**build.rs**
+
+```rust
+fn main() {
+    substreams_antelope::Abigen::new("Contract", "abi/gems.blend.abi.json")
+        .expect("failed to load abi")
+        .generate()
+        .expect("failed to generate contract")
+        .write_to_file("src/abi/gems.blend.abi.rs")
+        .expect("failed to write contract");
 }
 ```

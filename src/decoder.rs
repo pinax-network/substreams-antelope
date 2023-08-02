@@ -1,44 +1,72 @@
-use serde::de::DeserializeOwned;
-use serde::{Deserialize, Deserializer};
+use serde::{de, Deserialize, Deserializer};
+use serde_json::Value;
 
-pub fn decode<T: DeserializeOwned>(json_str: &str) -> Result<T, crate::errors::Error> {
+use crate::types::*;
+
+pub fn decode<T: de::DeserializeOwned>(json_str: &str) -> Result<T, crate::errors::Error> {
     serde_json::from_str::<T>(json_str).map_err(|_| crate::errors::Error::JsonDecodeError)
 }
 
-pub fn str_or_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
+pub fn str_or_u64<'de, D>(deserializer: D) -> Result<Uint64, D::Error>
 where
     D: Deserializer<'de>,
 {
-    #[derive(Deserialize)]
-    #[serde(untagged)]
-    enum StrOrU64<'a> {
-        Str(&'a str),
-        U64(u64),
-    }
-
-    Ok(match StrOrU64::deserialize(deserializer)? {
-        StrOrU64::Str(v) => v
-            .parse::<u64>()
-            .map_err(|_| serde::de::Error::custom("failed to parse u64 number"))?,
-        StrOrU64::U64(v) => v,
+    Ok(match Deserialize::deserialize(deserializer)? {
+        Value::String(v) => v.parse::<Uint64>().map_err(|_| de::Error::custom("failed to parse u64 number"))?,
+        Value::Number(v) => v.as_u64().ok_or(de::Error::custom("failed to get u64 number"))?,
+        _ => return Err(de::Error::custom("Invalid u64 number type")),
     })
 }
 
-pub fn str_or_i64<'de, D>(deserializer: D) -> Result<i64, D::Error>
+pub fn str_or_i64<'de, D>(deserializer: D) -> Result<Int64, D::Error>
 where
     D: Deserializer<'de>,
 {
-    #[derive(Deserialize)]
-    #[serde(untagged)]
-    enum StrOrI64<'a> {
-        Str(&'a str),
-        I64(i64),
-    }
-
-    Ok(match StrOrI64::deserialize(deserializer)? {
-        StrOrI64::Str(v) => v
-            .parse::<i64>()
-            .map_err(|_| serde::de::Error::custom("failed to parse i64 number"))?,
-        StrOrI64::I64(v) => v,
+    Ok(match Deserialize::deserialize(deserializer)? {
+        Value::String(v) => v.parse::<Int64>().map_err(|_| de::Error::custom("failed to parse i64 number"))?,
+        Value::Number(v) => v.as_i64().ok_or(de::Error::custom("failed to get i64 number"))?,
+        _ => return Err(de::Error::custom("Invalid u64 number type")),
     })
+}
+
+pub fn vec_str_or_u64<'de, D>(deserializer: D) -> Result<Vec<Uint64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    match Deserialize::deserialize(deserializer)? {
+        Value::Array(values) => values
+            .into_iter()
+            .map(|strnum| match strnum {
+                Value::String(str) => str
+                    .parse::<Uint64>()
+                    .map_err(|_| de::Error::custom(format!("Failed to parse strnum: {}", str))),
+                Value::Number(num) => num
+                    .as_u64()
+                    .ok_or(de::Error::custom(format!("Failed to convert strnum to u64: {}", num))),
+                _ => Err(de::Error::custom("Invalid strnum type")),
+            })
+            .collect(),
+        _ => Err(de::Error::custom("Invalid array")),
+    }
+}
+
+pub fn vec_str_or_i64<'de, D>(deserializer: D) -> Result<Vec<Int64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    match Deserialize::deserialize(deserializer)? {
+        Value::Array(values) => values
+            .into_iter()
+            .map(|strnum| match strnum {
+                Value::String(str) => str
+                    .parse::<Int64>()
+                    .map_err(|_| de::Error::custom(format!("Failed to parse strnum: {}", str))),
+                Value::Number(num) => num
+                    .as_i64()
+                    .ok_or(de::Error::custom(format!("Failed to convert strnum to i64: {}", num))),
+                _ => Err(de::Error::custom("Invalid strnum type")),
+            })
+            .collect(),
+        _ => Err(de::Error::custom("Invalid array")),
+    }
 }

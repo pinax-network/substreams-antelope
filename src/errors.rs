@@ -5,12 +5,14 @@ use std::fmt::{self, Display};
 #[derive(Debug)]
 pub enum Error {
     JsonDecodeError,
+    AbiLoadError,
 }
 
 impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Error::JsonDecodeError => write!(f, "failed to decode data json"),
+            Error::AbiLoadError => write!(f, "failed to load abi"),
         }
     }
 }

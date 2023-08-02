@@ -28,3 +28,9 @@ pub type Int128 = i128;
 pub type Float32 = std::string::String;
 pub type Float64 = std::string::String;
 pub type Float128 = std::string::String;
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize)]
+pub struct ExtendedAsset {
+    pub quantity: Asset,
+    pub contract: Name,
+}

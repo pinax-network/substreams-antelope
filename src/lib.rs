@@ -23,9 +23,12 @@
 pub mod pb;
 pub use self::pb::*;
 
+pub mod abigen;
 pub mod action;
 /// Modules Antelope Block
 pub mod block;
 pub mod decoder;
 pub mod errors;
 pub mod types;
+
+pub use abigen::build::Abigen;
