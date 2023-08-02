@@ -52,7 +52,8 @@ impl From<ABI> for Contract {
 
 #[cfg(test)]
 mod test {
-    use crate::abigen::{abi::ABI, assert::assert_ast_eq};
+    use crate::abi::ABI;
+    use crate::assert::assert_ast_eq;
     use quote::quote;
 
     use super::Contract;

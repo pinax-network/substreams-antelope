@@ -53,7 +53,7 @@ impl Field {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::abigen::abi::ABIType;
+    use crate::abi::ABIType;
     use quote::quote;
 
     #[test]
