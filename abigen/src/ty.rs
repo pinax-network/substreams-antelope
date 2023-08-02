@@ -40,7 +40,7 @@ impl Type {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::abigen::abi::{ABIStruct, ABIType};
+    use crate::abi::{ABIStruct, ABIType};
     use quote::quote;
     #[test]
     fn test_type_generate() {

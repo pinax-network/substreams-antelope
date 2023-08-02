@@ -1,0 +1,27 @@
+[package]
+name = "substreams-antelope-core"
+version.workspace = true
+description.workspace = true
+edition.workspace = true
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+[dependencies]
+prost = "0.11"
+prost-types = "0.11"
+substreams = "^0.5.0"
+
+[build-dependencies]
+prost-build = "0.11"
+
+[dev-dependencies]
+anyhow = "1"
+pretty_assertions = "1.2.1"

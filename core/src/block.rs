@@ -1,5 +1,5 @@
 use crate::block::pb::TransactionStatus::TransactionstatusExecuted;
-use crate::{pb, ActionTrace};
+use crate::pb;
 
 impl pb::Block {
     /// returns all transaction traces from the block without consuming it.
@@ -74,7 +74,7 @@ impl pb::Block {
     ///     })
     ///     .collect();
     /// ```
-    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &ActionTrace)> + 'a {
+    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
         self.all_action_traces().filter_map(|trace| {
             if !accounts.contains(&trace.action.as_ref().unwrap().account.as_str()) {
                 return None;

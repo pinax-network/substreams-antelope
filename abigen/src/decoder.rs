@@ -1,10 +1,10 @@
+use crate::types::*;
 use serde::{de, Deserialize, Deserializer};
 use serde_json::Value;
+use substreams_antelope_core::errors::Error;
 
-use crate::types::*;
-
-pub fn decode<T: de::DeserializeOwned>(json_str: &str) -> Result<T, crate::errors::Error> {
-    serde_json::from_str::<T>(json_str).map_err(|_| crate::errors::Error::JsonDecodeError)
+pub fn decode<T: de::DeserializeOwned>(json_str: &str) -> Result<T, Error> {
+    serde_json::from_str::<T>(json_str).map_err(|_| Error::JsonDecodeError)
 }
 
 pub fn str_or_u64<'de, D>(deserializer: D) -> Result<Uint64, D::Error>

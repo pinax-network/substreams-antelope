@@ -81,7 +81,7 @@ fn map_actions(param_account: String, block: substreams_antelope::Block) -> Resu
 
 
 ## Using Abigen
-To generate ABI bindings for your smart contract you can add `abi/contract.abi.json` file containing the smart contract ABI, as well as the following `build.rs` file to the root of your project, to make sure `src/abi/contract.rs` is always generated in your project:
+To generate ABI bindings for your smart contract you can add `abi/contract.abi.json` file containing the smart contract ABI, as well as the following `build.rs` file to the root of your project. This will ensure that `src/abi/contract.rs` module containing Rust bindings for your smart contract is always generated in your project:
 
 **build.rs**
 
