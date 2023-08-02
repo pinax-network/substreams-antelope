@@ -27,12 +27,12 @@ impl Action {
 
         quote! {
             #ty
-            impl substreams_antelope::action::Action for #camel_name {
+            impl substreams_antelope::Action for #camel_name {
                 const NAME: &'static str = #name;
                 fn decode(
                     trace: &substreams_antelope::pb::ActionTrace,
-                ) -> Result<Self, substreams_antelope::errors::Error> {
-                    Ok(substreams_antelope::decoder::decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
+                ) -> Result<Self, substreams_antelope::Error> {
+                    Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
                 }
             }
         }

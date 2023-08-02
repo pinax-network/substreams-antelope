@@ -123,6 +123,7 @@ pub mod types {
 pub mod actions {
     use substreams_antelope::types::*;
     use super::types::*;
+    use substreams_antelope::decoder::decode;
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
     #[serde(deny_unknown_fields)]
     pub struct Cleartable {
@@ -131,16 +132,12 @@ pub mod actions {
         #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")]
         pub max_rows: Uint64,
     }
-    impl substreams_antelope::action::Action for Cleartable {
+    impl substreams_antelope::Action for Cleartable {
         const NAME: &'static str = "cleartable";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -150,16 +147,12 @@ pub mod actions {
         pub user_id: Name,
         pub round_id: Uint16,
     }
-    impl substreams_antelope::action::Action for Collapse {
+    impl substreams_antelope::Action for Collapse {
         const NAME: &'static str = "collapse";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -167,16 +160,12 @@ pub mod actions {
     pub struct Deltoken {
         pub symcode: SymbolCode,
     }
-    impl substreams_antelope::action::Action for Deltoken {
+    impl substreams_antelope::Action for Deltoken {
         const NAME: &'static str = "deltoken";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -185,16 +174,12 @@ pub mod actions {
         pub grant_id: Name,
         pub round_id: Uint16,
     }
-    impl substreams_antelope::action::Action for Joinround {
+    impl substreams_antelope::Action for Joinround {
         const NAME: &'static str = "joinround";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -203,16 +188,12 @@ pub mod actions {
         pub user_ids: Vec<Name>,
         pub round_id: Uint16,
     }
-    impl substreams_antelope::action::Action for Removeuser {
+    impl substreams_antelope::Action for Removeuser {
         const NAME: &'static str = "removeuser";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -226,16 +207,12 @@ pub mod actions {
         pub login_contract: Name,
         pub fee_account: Name,
     }
-    impl substreams_antelope::action::Action for Setconfig {
+    impl substreams_antelope::Action for Setconfig {
         const NAME: &'static str = "setconfig";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -244,16 +221,12 @@ pub mod actions {
         pub grant_id: Name,
         pub user_id: Name,
     }
-    impl substreams_antelope::action::Action for Setfunding {
+    impl substreams_antelope::Action for Setfunding {
         const NAME: &'static str = "setfunding";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -264,16 +237,12 @@ pub mod actions {
         pub funding_account: Name,
         pub accepted_tokens: Vec<SymbolCode>,
     }
-    impl substreams_antelope::action::Action for Setgrant {
+    impl substreams_antelope::Action for Setgrant {
         const NAME: &'static str = "setgrant";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -282,16 +251,12 @@ pub mod actions {
         pub grant_id: Name,
         pub new_grant_id: Name,
     }
-    impl substreams_antelope::action::Action for Setgrantid {
+    impl substreams_antelope::Action for Setgrantid {
         const NAME: &'static str = "setgrantid";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -303,16 +268,12 @@ pub mod actions {
         pub funding_account: Name,
         pub accepted_tokens: Vec<SymbolCode>,
     }
-    impl substreams_antelope::action::Action for Setproject {
+    impl substreams_antelope::Action for Setproject {
         const NAME: &'static str = "setproject";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -323,16 +284,12 @@ pub mod actions {
         pub description: String,
         pub match_value: Float64,
     }
-    impl substreams_antelope::action::Action for Setround {
+    impl substreams_antelope::Action for Setround {
         const NAME: &'static str = "setround";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -346,16 +303,12 @@ pub mod actions {
         pub description: String,
         pub match_value: Float64,
     }
-    impl substreams_antelope::action::Action for Setseason {
+    impl substreams_antelope::Action for Setseason {
         const NAME: &'static str = "setseason";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -364,16 +317,12 @@ pub mod actions {
         pub project_id: Name,
         pub state: Name,
     }
-    impl substreams_antelope::action::Action for Setstate {
+    impl substreams_antelope::Action for Setstate {
         const NAME: &'static str = "setstate";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -387,16 +336,12 @@ pub mod actions {
         #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")]
         pub oracle_id: Uint64,
     }
-    impl substreams_antelope::action::Action for Token {
+    impl substreams_antelope::Action for Token {
         const NAME: &'static str = "token";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -405,16 +350,12 @@ pub mod actions {
         pub grant_id: Name,
         pub round_id: Uint16,
     }
-    impl substreams_antelope::action::Action for Unjoinround {
+    impl substreams_antelope::Action for Unjoinround {
         const NAME: &'static str = "unjoinround";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -423,16 +364,12 @@ pub mod actions {
         #[serde(rename = "in")]
         pub in_: ExtendedAsset,
     }
-    impl substreams_antelope::action::Action for Value {
+    impl substreams_antelope::Action for Value {
         const NAME: &'static str = "value";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
 }

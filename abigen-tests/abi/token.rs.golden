@@ -16,22 +16,19 @@ pub mod types {
 pub mod actions {
     use substreams_antelope::types::*;
     use super::types::*;
+    use substreams_antelope::decoder::decode;
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
     #[serde(deny_unknown_fields)]
     pub struct Close {
         pub owner: Name,
         pub symbol: Symbol,
     }
-    impl substreams_antelope::action::Action for Close {
+    impl substreams_antelope::Action for Close {
         const NAME: &'static str = "close";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -40,16 +37,12 @@ pub mod actions {
         pub issuer: Name,
         pub maximum_supply: Asset,
     }
-    impl substreams_antelope::action::Action for Create {
+    impl substreams_antelope::Action for Create {
         const NAME: &'static str = "create";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -59,16 +52,12 @@ pub mod actions {
         pub quantity: Asset,
         pub memo: String,
     }
-    impl substreams_antelope::action::Action for Issue {
+    impl substreams_antelope::Action for Issue {
         const NAME: &'static str = "issue";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -78,16 +67,12 @@ pub mod actions {
         pub symbol: Symbol,
         pub ram_payer: Name,
     }
-    impl substreams_antelope::action::Action for Open {
+    impl substreams_antelope::Action for Open {
         const NAME: &'static str = "open";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -96,16 +81,12 @@ pub mod actions {
         pub quantity: Asset,
         pub memo: String,
     }
-    impl substreams_antelope::action::Action for Retire {
+    impl substreams_antelope::Action for Retire {
         const NAME: &'static str = "retire";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -116,16 +97,12 @@ pub mod actions {
         pub quantity: Asset,
         pub memo: String,
     }
-    impl substreams_antelope::action::Action for Transfer {
+    impl substreams_antelope::Action for Transfer {
         const NAME: &'static str = "transfer";
         fn decode(
             trace: &substreams_antelope::pb::ActionTrace,
-        ) -> Result<Self, substreams_antelope::errors::Error> {
-            Ok(
-                substreams_antelope::decoder::decode::<
-                    Self,
-                >(&trace.action.as_ref().unwrap().json_data)?,
-            )
+        ) -> Result<Self, substreams_antelope::Error> {
+            Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
         }
     }
 }
