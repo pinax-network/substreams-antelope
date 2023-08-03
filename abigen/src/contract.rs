@@ -80,6 +80,7 @@ mod test {
                 pub mod actions {
                     use substreams_antelope::types::*;
                     use super::types::*;
+                    use substreams_antelope::decoder::decode;
                 }
             },
         );
@@ -100,6 +101,7 @@ mod test {
                 pub mod actions {
                     use substreams_antelope::types::*;
                     use super::types::*;
+                    use substreams_antelope::decoder::decode;
                 }
             },
         );
