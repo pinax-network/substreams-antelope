@@ -3,7 +3,90 @@ mod tests {
     use std::fs;
     use std::io::Read;
 
+    use substreams_antelope::pb;
     use substreams_antelope_abigen::Abigen;
+    mod actions {
+        use substreams_antelope_abigen::decoder::decode;
+        use substreams_antelope_abigen::types::*;
+        #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
+        #[serde(deny_unknown_fields)]
+        pub struct Transfer {
+            pub from: Name,
+            pub to: Name,
+            pub quantity: Asset,
+            pub memo: String,
+        }
+        impl substreams_antelope::Action for Transfer {
+            const NAME: &'static str = "transfer";
+            fn decode(trace: &substreams_antelope::pb::ActionTrace) -> Result<Self, substreams_antelope::Error> {
+                Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
+            }
+        }
+    }
+
+    fn create_test_block(
+        filtering_applied: bool,
+        unfiltered_transaction_traces: Vec<pb::TransactionTrace>,
+        filtered_transaction_traces: Vec<pb::TransactionTrace>,
+        unfiltered_transaction_count: u32,
+        filtered_transaction_count: u32,
+        unfiltered_executed_input_action_count: u32,
+        filtered_executed_input_action_count: u32,
+        unfiltered_executed_total_action_count: u32,
+        filtered_executed_total_action_count: u32,
+    ) -> pb::Block {
+        pb::Block {
+            filtering_applied,
+            unfiltered_transaction_traces,
+            filtered_transaction_traces,
+            unfiltered_transaction_count,
+            filtered_transaction_count,
+            unfiltered_executed_input_action_count,
+            filtered_executed_input_action_count,
+            unfiltered_executed_total_action_count,
+            filtered_executed_total_action_count,
+            ..Default::default()
+        }
+    }
+
+    fn create_transfer_trace() -> pb::TransactionTrace {
+        pb::TransactionTrace {
+            id: String::from("trx1"),
+            action_traces: vec![
+                pb::ActionTrace {
+                    action: Some(pb::Action {
+                        account: "tokencontract".into(),
+                        name: "transfer".into(),
+                        json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS", "memo": "hello"}"#.into(),
+                        ..Default::default()
+                    }),
+                    receiver: "tokencontract".into(),
+                    ..Default::default()
+                },
+                pb::ActionTrace {
+                    action: Some(pb::Action {
+                        account: "tokencontract".into(),
+                        name: "transfer".into(),
+                        json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS", "memo": "hello"}"#.into(),
+                        ..Default::default()
+                    }),
+                    receiver: "acc1".into(),
+                    ..Default::default()
+                },
+                pb::ActionTrace {
+                    action: Some(pb::Action {
+                        account: "tokencontract".into(),
+                        name: "transfer".into(),
+                        json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS", "memo": "hello"}"#.into(),
+                        ..Default::default()
+                    }),
+                    receiver: "acc2".into(),
+                    ..Default::default()
+                },
+            ],
+            ..Default::default()
+        }
+    }
 
     #[test]
     fn test_contract_generation() {
@@ -36,5 +119,54 @@ mod tests {
             }
         }
         assert!(files_tested > 0, "No files tested");
+    }
+
+    #[test]
+    fn test_actions() {
+        let transfer_trace = create_transfer_trace();
+        let block = create_test_block(false, vec![transfer_trace.clone()], vec![], 2, 0, 5, 0, 7, 0);
+        let actions: Vec<_> = block.actions::<actions::Transfer>(&["tokencontract"]).collect();
+        pretty_assertions::assert_eq!(
+            actions,
+            vec![(
+                actions::Transfer {
+                    from: "acc1".into(),
+                    to: "acc2".into(),
+                    quantity: "1.0000 EOS".into(),
+                    memo: "hello".into(),
+                },
+                &transfer_trace.action_traces[0]
+            ),]
+        );
+    }
+
+    #[test]
+    fn test_notifications() {
+        let transfer_trace = create_transfer_trace();
+        let block = create_test_block(false, vec![transfer_trace.clone()], vec![], 2, 0, 5, 0, 7, 0);
+        let actions: Vec<_> = block.notifications::<actions::Transfer>(&["tokencontract"]).collect();
+        pretty_assertions::assert_eq!(
+            actions,
+            vec![
+                (
+                    actions::Transfer {
+                        from: "acc1".into(),
+                        to: "acc2".into(),
+                        quantity: "1.0000 EOS".into(),
+                        memo: "hello".into(),
+                    },
+                    &transfer_trace.action_traces[1]
+                ),
+                (
+                    actions::Transfer {
+                        from: "acc1".into(),
+                        to: "acc2".into(),
+                        quantity: "1.0000 EOS".into(),
+                        memo: "hello".into(),
+                    },
+                    &transfer_trace.action_traces[2]
+                ),
+            ]
+        );
     }
 }

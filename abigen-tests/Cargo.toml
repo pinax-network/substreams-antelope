@@ -16,3 +16,5 @@ substreams-antelope-abigen = { workspace = true }
 
 [dev-dependencies]
 pretty_assertions = "1"
+substreams-antelope = { path = "../substreams-antelope" }
+serde = { version = "1.0", features = ["derive"] }

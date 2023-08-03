@@ -16,8 +16,8 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 substreams = "^0.5.0"
-substreams-antelope-core = { version = "0.3.0", path = "../core" }
-substreams-antelope-abigen = { version = "0.3.0", path = "../abigen" }
+substreams-antelope-core = { version = "0.*", path = "../core" }
+substreams-antelope-abigen = { version = "0.*", path = "../abigen" }
 
 [dev-dependencies]
 anyhow = "1"

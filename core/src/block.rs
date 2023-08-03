@@ -63,25 +63,51 @@ impl pb::Block {
         }
     }
 
-    /// returns all actions of a type from the block which match the given accounts
+    /// returns all actions and notifications of a specified type from the block which match the given contract accounts
     /// ```ignore
-    /// let state_changes = block.actions::<abi::contract::actions::Statelog>(&["mycontract"])
+    /// let actions = block.all_actions::<abi::contract::actions::Statelog>(&["mycontract"])
     ///     .map(|(action, trx)| StateChange {
-    ///         trx_id: trx.transaction_id.clone(),
-    ///         trx_index: trx.action_ordinal,
-    ///         user: action.user,
-    ///         state: action.status,
+    ///         // set action fields
     ///     })
     ///     .collect();
     /// ```
-    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
+    pub fn all_actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
         self.all_action_traces().filter_map(|trace| {
-            if !accounts.contains(&trace.action.as_ref().unwrap().account.as_str()) {
+            let contract = trace.action.as_ref().unwrap().account.as_str();
+            if !accounts.contains(&contract) {
                 return None;
             }
 
             A::match_and_decode(trace).map(|action| (action, trace))
         })
+    }
+
+    /// returns all actions of a specified type from the block which match the given contract accounts
+    /// NOT including action notifications
+    /// ```ignore
+    /// let actions = block.actions::<abi::contract::actions::Statelog>(&["mycontract"])
+    ///     .map(|(action, trx)| StateChange {
+    ///         // set action fields
+    ///     })
+    ///     .collect();
+    /// ```
+    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
+        self.all_actions(accounts)
+            .filter(|(_, trace)| trace.receiver.as_str() == trace.action.as_ref().unwrap().account.as_str())
+    }
+
+    /// returns all action notifications of a specified type from the block which match the given contract accounts
+    /// ONLY including action notifications
+    /// ```ignore
+    /// let notifications = block.notifications::<abi::contract::actions::Statelog>(&["mycontract"])
+    ///     .map(|(action, trx)| StateChange {
+    ///         // set action fields
+    ///     })
+    ///     .collect();
+    /// ```
+    pub fn notifications<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
+        self.all_actions(accounts)
+            .filter(|(_, trace)| trace.receiver.as_str() != trace.action.as_ref().unwrap().account.as_str())
     }
 }
 
