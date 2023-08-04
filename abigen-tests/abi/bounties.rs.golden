@@ -1,3 +1,5 @@
+#[allow(dead_code)]
+pub const ACCOUNT: Option<&'static str> = None;
 pub mod types {
     use substreams_antelope::types::*;
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
@@ -84,8 +86,9 @@ pub mod types {
 }
 pub mod actions {
     use substreams_antelope::types::*;
-    use super::types::*;
     use substreams_antelope::decoder::decode;
+    #[allow(unused_imports)]
+    use super::types::*;
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
     #[serde(deny_unknown_fields)]
     pub struct Apply {

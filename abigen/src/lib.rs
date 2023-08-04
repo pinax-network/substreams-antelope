@@ -28,9 +28,15 @@ pub fn generate_abi_code<S: AsRef<str>>(path: S) -> Result<proc_macro2::TokenStr
     let mut contents = String::new();
     reader.read_to_string(&mut contents)?;
 
-    let contract = ABI::try_from(contents.as_str())?;
+    let (contract, account_name) = match ABI::try_from(contents.as_str()) {
+        Ok(c) => (c, None),
+        Err(_) => {
+            let w = abi::WrappedABI::try_from(contents.as_str())?;
+            (w.abi, Some(w.account_name))
+        }
+    };
     let c = contract::Contract::from(contract);
-    Ok(c.generate())
+    Ok(c.generate(account_name))
 }
 
 pub fn normalize_path<S: AsRef<Path>>(relative_path: S) -> Result<PathBuf, anyhow::Error> {

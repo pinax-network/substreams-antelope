@@ -19,6 +19,7 @@ pub struct ABIAction {
     pub name: String,
     #[serde(rename = "type")]
     pub ty: String,
+    #[serde(default)]
     pub ricardian_contract: String,
 }
 
@@ -28,7 +29,9 @@ pub struct ABITable {
     #[serde(rename = "type")]
     ty: String,
     index_type: String,
+    #[serde(default)]
     key_names: Vec<String>,
+    #[serde(default)]
     key_types: Vec<String>,
 }
 
@@ -65,11 +68,29 @@ pub struct ABIErrorMessage {
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WrappedABI {
+    pub account_name: String,
+    pub abi: ABI,
+}
+
+impl TryFrom<&str> for WrappedABI {
+    type Error = serde_json::Error;
+    #[inline]
+    fn try_from(str: &str) -> Result<Self, Self::Error> {
+        serde_json::from_str(str)
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ABI {
     pub version: String,
+    #[serde(default)]
     pub types: Vec<ABITypes>,
+    #[serde(default)]
     pub structs: Vec<ABIStruct>,
+    #[serde(default)]
     pub actions: Vec<ABIAction>,
+    #[serde(default)]
     pub tables: Vec<ABITable>,
     #[serde(default)]
     pub variants: Vec<ABIVariant>,

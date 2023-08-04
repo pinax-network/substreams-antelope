@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-pub const ACCOUNT: Option<&'static str> = None;
+pub const ACCOUNT: Option<&'static str> = Some("eosio.token");
 pub mod types {
     use substreams_antelope::types::*;
     #[derive(Debug, Clone, PartialEq, serde::Deserialize)]

@@ -8,7 +8,7 @@ pub(crate) fn assert_ast_eq(actual: proc_macro2::TokenStream, expected: proc_mac
 
 #[cfg(test)]
 fn pretty_print_item(item: proc_macro2::TokenStream) -> String {
-    let file = syn::parse_file(&item.to_string()).unwrap();
+    let file = syn::parse_file(&item.to_string()).expect("Failed to parse TokenStream file");
 
     prettyplease::unparse(&file)
 }

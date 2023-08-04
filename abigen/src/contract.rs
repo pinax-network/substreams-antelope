@@ -12,19 +12,27 @@ pub struct Contract {
 }
 
 impl Contract {
-    pub fn generate(&self) -> TokenStream {
+    pub fn generate(&self, account: Option<String>) -> TokenStream {
         let types: Vec<_> = self.types.iter().filter(|ty| !ty.is_entity).map(Type::generate).collect();
         let actions: Vec<_> = self.actions.iter().map(Action::generate).collect();
 
+        let account = match account {
+            Some(value) => quote! { Some(#value) },
+            None => quote! { None },
+        };
+
         quote! {
+            #[allow(dead_code)]
+            pub const ACCOUNT: Option<&'static str> = #account;
             pub mod types {
                 use substreams_antelope::types::*;
                 #(#types)*
             }
             pub mod actions {
                 use substreams_antelope::types::*;
-                use super::types::*;
                 use substreams_antelope::decoder::decode;
+                #[allow(unused_imports)]
+                use super::types::*;
                 #(#actions)*
             }
         }
@@ -72,15 +80,18 @@ mod test {
         let c = Contract::from(abi_contract);
 
         assert_ast_eq(
-            c.generate(),
+            c.generate(None),
             quote! {
+                #[allow(dead_code)]
+                pub const ACCOUNT: Option<& 'static str> = None;
                 pub mod types {
                     use substreams_antelope::types::*;
                 }
                 pub mod actions {
                     use substreams_antelope::types::*;
-                    use super::types::*;
                     use substreams_antelope::decoder::decode;
+                    #[allow(unused_imports)]
+                    use super::types::*;
                 }
             },
         );
@@ -93,15 +104,42 @@ mod test {
         let c = Contract::from(abi_contract);
 
         assert_ast_eq(
-            c.generate(),
+            c.generate(None),
             quote! {
+                #[allow(dead_code)]
+                pub const ACCOUNT: Option<& 'static str> = None;
                 pub mod types {
                     use substreams_antelope::types::*;
                 }
                 pub mod actions {
                     use substreams_antelope::types::*;
-                    use super::types::*;
                     use substreams_antelope::decoder::decode;
+                    #[allow(unused_imports)]
+                    use super::types::*;
+                }
+            },
+        );
+    }
+
+    #[test]
+    fn test_wrapped() {
+        let abi_contract = Contract { ..Default::default() };
+
+        let c = Contract::from(abi_contract);
+
+        assert_ast_eq(
+            c.generate(Some("tokencontract".to_owned())),
+            quote! {
+                #[allow(dead_code)]
+                pub const ACCOUNT: Option<&'static str> = Some("tokencontract");
+                pub mod types {
+                    use substreams_antelope::types::*;
+                }
+                pub mod actions {
+                    use substreams_antelope::types::*;
+                    use substreams_antelope::decoder::decode;
+                    #[allow(unused_imports)]
+                    use super::types::*;
                 }
             },
         );
