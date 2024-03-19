@@ -53,7 +53,7 @@ use substreams_antelope::{Block, ActionTraces};
 fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
     let mut action_traces = vec![];
 
-    for trx in block.all_transaction_traces() {
+    for trx in block.executed_transaction_traces() {
         for trace in trx.action_traces {
             action_traces.push(trace);
         }
