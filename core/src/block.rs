@@ -114,7 +114,7 @@ impl pb::Block {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::block::pb::TransactionStatus::TransactionstatusExecuted;
+    use crate::block::pb::TransactionStatus::{TransactionstatusExecuted, TransactionstatusSoftfail};
 
     // Helper function to create a test pb::Block instance
     fn create_test_block(
@@ -204,6 +204,38 @@ mod tests {
 
         let produced_traces: Vec<_> = block.executed_transaction_traces().cloned().collect();
         assert_eq!(executed_traces, produced_traces);
+    }
+
+    #[test]
+    fn test_executed_transaction_traces_no_receipt() {
+        let executed_traces = vec![
+            pb::TransactionTrace {
+                id: String::from("trx1"),
+                receipt: Some(pb::TransactionReceiptHeader {
+                    status: TransactionstatusExecuted as i32,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            pb::TransactionTrace {
+                id: String::from("trx2"),
+                receipt: Some(pb::TransactionReceiptHeader {
+                    status: TransactionstatusSoftfail as i32,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            pb::TransactionTrace {
+                id: String::from("trx3"),
+                receipt: None,
+                ..Default::default()
+            },
+        ];
+        let block = create_test_block(false, executed_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
+
+        let produced_traces: Vec<_> = block.executed_transaction_traces().cloned().collect();
+        assert_eq!(executed_traces[0], produced_traces[0]);
+        assert_eq!(produced_traces.len(), 1);
     }
 
     #[test]
