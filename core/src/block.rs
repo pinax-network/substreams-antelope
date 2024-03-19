@@ -33,7 +33,7 @@ impl pb::Block {
     /// returns all transaction traces which have the status `executed`
     pub fn executed_transaction_traces(&self) -> impl Iterator<Item = &pb::TransactionTrace> {
         self.all_transaction_traces()
-            .filter(|trx| trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32)
+            .filter(|trx| trx.receipt.is_some() && trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32)
     }
 
     /// returns the number of transaction traces included in this block
