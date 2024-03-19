@@ -12,7 +12,7 @@ opt-level = 's'
 strip = "debuginfo"
 
 [workspace.package]
-version = "0.3.3"
+version = "0.3.4"
 edition = "2021"
 description = "Substreams development kit for Antelope chains, contains Firehose Block model and helpers."
 authors = ["Fred <fred@pinax.network>", "Denis <denis@pinax.network>", "Yaro <yaro@pinax.network>"]
