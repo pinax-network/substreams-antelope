@@ -12,7 +12,7 @@ opt-level = 's'
 strip = "debuginfo"
 
 [workspace.package]
-version = "0.3.2"
+version = "0.3.3"
 edition = "2021"
 description = "Substreams development kit for Antelope chains, contains Firehose Block model and helpers."
 authors = ["Fred <fred@pinax.network>", "Denis <denis@pinax.network>", "Yaro <yaro@pinax.network>"]
@@ -22,7 +22,7 @@ readme = "README.md"
 keywords = [ "substreams", "antelope", "pinax", "firehose", "thegraph"]
 categories = ["api-bindings", "external-ffi-bindings", "wasm"]
 license = "MIT OR Apache-2.0"
-rust-version = "1.69"
+rust-version = "1.75"
 
 [workspace.dependencies]
 substreams-antelope = { version = "0.*", path = "./substreams-antelope" }
