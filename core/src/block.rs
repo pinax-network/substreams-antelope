@@ -202,8 +202,8 @@ mod tests {
         ];
         let block = create_test_block(false, executed_traces.clone(), vec![], 2, 0, 5, 0, 7, 0);
 
-        let executed_traces: Vec<_> = block.executed_transaction_traces().collect();
-        assert_eq!(executed_traces, executed_traces);
+        let produced_traces: Vec<_> = block.executed_transaction_traces().cloned().collect();
+        assert_eq!(executed_traces, produced_traces);
     }
 
     #[test]
