@@ -252,5 +252,4 @@ mod tests {
         assert_eq!(executed_traces[0], produced_traces[0]);
         assert_eq!(produced_traces.len(), 1);
     }
-
 }

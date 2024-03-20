@@ -3,9 +3,9 @@ mod tests {
     use std::fs;
     use std::io::Read;
 
+    use pb::TransactionStatus::TransactionstatusExecuted;
     use substreams_antelope::pb;
     use substreams_antelope_abigen::Abigen;
-    use pb::TransactionStatus::TransactionstatusExecuted;
 
     mod actions {
         use substreams_antelope_abigen::decoder::decode;
@@ -194,10 +194,7 @@ mod tests {
                 &transfer_trace.action_traces[0]
             ),]
         );
-        pretty_assertions::assert_eq!(
-            actions.len(),
-            1
-        );
+        pretty_assertions::assert_eq!(actions.len(), 1);
     }
 
     #[test]
@@ -216,10 +213,7 @@ mod tests {
                 &transfer_trace.action_traces[4]
             ),]
         );
-        pretty_assertions::assert_eq!(
-            actions.len(),
-            1
-        );
+        pretty_assertions::assert_eq!(actions.len(), 1);
     }
 
     #[test]
@@ -259,16 +253,14 @@ mod tests {
         let actions: Vec<_> = block.notifications::<actions::Transfer2>(&["tokencontract"]).collect();
         pretty_assertions::assert_eq!(
             actions,
-            vec![
-                (
-                    actions::Transfer2 {
-                        from: "acc1".into(),
-                        to: "acc2".into(),
-                        quantity: "1.0000 EOS".into(),
-                    },
-                    &transfer_trace.action_traces[5]
-                ),
-            ]
+            vec![(
+                actions::Transfer2 {
+                    from: "acc1".into(),
+                    to: "acc2".into(),
+                    quantity: "1.0000 EOS".into(),
+                },
+                &transfer_trace.action_traces[5]
+            ),]
         );
     }
 }
