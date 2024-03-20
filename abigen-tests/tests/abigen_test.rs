@@ -5,6 +5,8 @@ mod tests {
 
     use substreams_antelope::pb;
     use substreams_antelope_abigen::Abigen;
+    use pb::TransactionStatus::TransactionstatusExecuted;
+
     mod actions {
         use substreams_antelope_abigen::decoder::decode;
         use substreams_antelope_abigen::types::*;
@@ -18,6 +20,20 @@ mod tests {
         }
         impl substreams_antelope::Action for Transfer {
             const NAME: &'static str = "transfer";
+            fn decode(trace: &substreams_antelope::pb::ActionTrace) -> Result<Self, substreams_antelope::Error> {
+                Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
+            }
+        }
+
+        #[derive(Debug, Clone, PartialEq, serde::Deserialize)]
+        #[serde(deny_unknown_fields)]
+        pub struct Transfer2 {
+            pub from: Name,
+            pub to: Name,
+            pub quantity: Asset,
+        }
+        impl substreams_antelope::Action for Transfer2 {
+            const NAME: &'static str = "transfer2";
             fn decode(trace: &substreams_antelope::pb::ActionTrace) -> Result<Self, substreams_antelope::Error> {
                 Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
             }
@@ -52,7 +68,12 @@ mod tests {
     fn create_transfer_trace() -> pb::TransactionTrace {
         pb::TransactionTrace {
             id: String::from("trx1"),
+            receipt: Some(pb::TransactionReceiptHeader {
+                status: TransactionstatusExecuted as i32,
+                ..Default::default()
+            }),
             action_traces: vec![
+                // transfer action
                 pb::ActionTrace {
                     action: Some(pb::Action {
                         account: "tokencontract".into(),
@@ -63,6 +84,7 @@ mod tests {
                     receiver: "tokencontract".into(),
                     ..Default::default()
                 },
+                // notification #1
                 pb::ActionTrace {
                     action: Some(pb::Action {
                         account: "tokencontract".into(),
@@ -73,11 +95,45 @@ mod tests {
                     receiver: "acc1".into(),
                     ..Default::default()
                 },
+                // notification #2
                 pb::ActionTrace {
                     action: Some(pb::Action {
                         account: "tokencontract".into(),
                         name: "transfer".into(),
                         json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS", "memo": "hello"}"#.into(),
+                        ..Default::default()
+                    }),
+                    receiver: "acc2".into(),
+                    ..Default::default()
+                },
+                // action from another token contract
+                pb::ActionTrace {
+                    action: Some(pb::Action {
+                        account: "othercontract".into(),
+                        name: "transfer".into(),
+                        json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS", "memo": "hello"}"#.into(),
+                        ..Default::default()
+                    }),
+                    receiver: "othercontract".into(),
+                    ..Default::default()
+                },
+                // transfer2 action without memo
+                pb::ActionTrace {
+                    action: Some(pb::Action {
+                        account: "tokencontract".into(),
+                        name: "transfer2".into(),
+                        json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS"}"#.into(),
+                        ..Default::default()
+                    }),
+                    receiver: "tokencontract".into(),
+                    ..Default::default()
+                },
+                // transfer2 notification without memo
+                pb::ActionTrace {
+                    action: Some(pb::Action {
+                        account: "tokencontract".into(),
+                        name: "transfer2".into(),
+                        json_data: r#"{"from": "acc1", "to": "acc2", "quantity": "1.0000 EOS"}"#.into(),
                         ..Default::default()
                     }),
                     receiver: "acc2".into(),
@@ -138,6 +194,32 @@ mod tests {
                 &transfer_trace.action_traces[0]
             ),]
         );
+        pretty_assertions::assert_eq!(
+            actions.len(),
+            1
+        );
+    }
+
+    #[test]
+    fn test_actions_2() {
+        let transfer_trace = create_transfer_trace();
+        let block = create_test_block(false, vec![transfer_trace.clone()], vec![], 2, 0, 5, 0, 7, 0);
+        let actions: Vec<_> = block.actions::<actions::Transfer2>(&["tokencontract"]).collect();
+        pretty_assertions::assert_eq!(
+            actions,
+            vec![(
+                actions::Transfer2 {
+                    from: "acc1".into(),
+                    to: "acc2".into(),
+                    quantity: "1.0000 EOS".into(),
+                },
+                &transfer_trace.action_traces[4]
+            ),]
+        );
+        pretty_assertions::assert_eq!(
+            actions.len(),
+            1
+        );
     }
 
     #[test]
@@ -165,6 +247,26 @@ mod tests {
                         memo: "hello".into(),
                     },
                     &transfer_trace.action_traces[2]
+                ),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_notifications_2() {
+        let transfer_trace = create_transfer_trace();
+        let block = create_test_block(false, vec![transfer_trace.clone()], vec![], 2, 0, 5, 0, 7, 0);
+        let actions: Vec<_> = block.notifications::<actions::Transfer2>(&["tokencontract"]).collect();
+        pretty_assertions::assert_eq!(
+            actions,
+            vec![
+                (
+                    actions::Transfer2 {
+                        from: "acc1".into(),
+                        to: "acc2".into(),
+                        quantity: "1.0000 EOS".into(),
+                    },
+                    &transfer_trace.action_traces[5]
                 ),
             ]
         );
