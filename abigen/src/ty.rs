@@ -33,6 +33,12 @@ impl Type {
             pub struct #camel_name {
                 #(#fields),*
             }
+            impl std::str::FromStr for #camel_name {
+                type Err = substreams_antelope::Error;
+                fn from_str(value: &str) -> Result<Self, Self::Err> {
+                    substreams_antelope::decoder::decode::<Self>(value)
+                }
+            }
         }
     }
 }
