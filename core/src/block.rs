@@ -47,7 +47,8 @@ impl pb::Block {
     ///     .collect();
     /// ```
     pub fn action_traces(&self) -> impl Iterator<Item = (&pb::ActionTrace, &pb::TransactionTrace)> {
-        self.transaction_traces().flat_map(|trx| trx.action_traces.iter().map(move |trace| (trace, trx)))
+        self.transaction_traces()
+            .flat_map(|trx| trx.action_traces.iter().map(move |trace| (trace, trx)))
     }
 
     /// returns all executed action traces from the block and consumes it. Transaction traces are not returned.
@@ -70,7 +71,10 @@ impl pb::Block {
     ///     })
     ///     .collect();
     /// ```
-    pub fn all_actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
+    pub fn all_actions<'a, A: crate::action::Action>(
+        &'a self,
+        accounts: &'a [&str],
+    ) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
         self.action_traces().filter_map(|(trace, trx)| {
             let contract = trace.action.as_ref().unwrap().account.as_str();
             if !accounts.is_empty() && !accounts.contains(&contract) {
@@ -90,7 +94,10 @@ impl pb::Block {
     ///     })
     ///     .collect();
     /// ```
-    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
+    pub fn actions<'a, A: crate::action::Action>(
+        &'a self,
+        accounts: &'a [&str],
+    ) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
         self.all_actions(accounts)
             .filter(|(_, trace, _)| trace.receiver.as_str() == trace.action.as_ref().unwrap().account.as_str())
     }
@@ -104,7 +111,10 @@ impl pb::Block {
     ///     })
     ///     .collect();
     /// ```
-    pub fn notifications<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
+    pub fn notifications<'a, A: crate::action::Action>(
+        &'a self,
+        accounts: &'a [&str],
+    ) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
         self.all_actions(accounts)
             .filter(|(_, trace, _)| trace.receiver.as_str() != trace.action.as_ref().unwrap().account.as_str())
     }
