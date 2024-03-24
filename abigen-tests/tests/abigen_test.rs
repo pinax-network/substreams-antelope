@@ -21,7 +21,7 @@ mod tests {
         impl substreams_antelope::Action for Transfer {
             const NAME: &'static str = "transfer";
             fn decode(trace: &substreams_antelope::pb::ActionTrace) -> Result<Self, substreams_antelope::Error> {
-                Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
+                decode::<Self>(&trace.action.as_ref().unwrap().json_data)
             }
         }
 
@@ -35,7 +35,7 @@ mod tests {
         impl substreams_antelope::Action for Transfer2 {
             const NAME: &'static str = "transfer2";
             fn decode(trace: &substreams_antelope::pb::ActionTrace) -> Result<Self, substreams_antelope::Error> {
-                Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
+                decode::<Self>(&trace.action.as_ref().unwrap().json_data)
             }
         }
     }
