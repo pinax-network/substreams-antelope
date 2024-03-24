@@ -32,7 +32,7 @@ impl Action {
                 fn decode(
                     trace: &substreams_antelope::pb::ActionTrace,
                 ) -> Result<Self, substreams_antelope::Error> {
-                    Ok(decode::<Self>(&trace.action.as_ref().unwrap().json_data)?)
+                    decode::<Self>(&trace.action.as_ref().unwrap().json_data)
                 }
             }
         }

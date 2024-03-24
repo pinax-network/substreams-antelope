@@ -15,16 +15,6 @@
 
 - [Substreams documentation](https://substreams.streamingfast.io)
 
-## 🛠 Feature Roadmap
-
-- [x] [Antelope blocks](https://github.com/pinax-network/firehose-antelope/blob/develop/proto/sf/antelope/type/v1/type.proto)
-- [x] Block helper methods
-    - [x] all_transaction_traces
-    - [x] executed_transaction_traces
-    - [x] transaction_traces_count
-    - [x] executed_input_action_count
-    - [x] executed_total_action_count
-    - [x] actions()
 
 ## Install
 
@@ -32,14 +22,16 @@
 $ cargo add substreams-antelope
 ```
 
-## Quickstart
+## Usage
+
+Refer to [Docs.rs](https://docs.rs/substreams-antelope/latest/substreams_antelope/struct.Block.html#implementations) for helper methods on `Block` that extract action and transaction iterators from the Antelope block.
 
 **Cargo.toml**
 
 ```toml
 [dependencies]
 substreams = "0.5"
-substreams-antelope = "0.2"
+substreams-antelope = "0.4"
 ```
 
 **src/lib.rs**
@@ -53,7 +45,7 @@ use substreams_antelope::{Block, ActionTraces};
 fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
     let mut action_traces = vec![];
 
-    for trx in block.executed_transaction_traces() {
+    for trx in block.transaction_traces() {
         for trace in trx.action_traces {
             action_traces.push(trace);
         }
@@ -62,7 +54,7 @@ fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
 }
 ```
 
-Or, using `actions()` filter to filter all actions of `Statelog` type from `myaccount` account:
+Or, using `actions()` helper method to filter all actions of `Statelog` type from `myaccount` account. As a parameter you can specify a list of contract account names to include actions from, that can be empty if you want actions with this signature from any contract account.
 
 **src/lib.rs**
 
@@ -70,8 +62,8 @@ Or, using `actions()` filter to filter all actions of `Statelog` type from `myac
 #[substreams::handlers::map]
 fn map_actions(param_account: String, block: substreams_antelope::Block) -> Result<Actions, substreams::errors::Error> {
     Ok(Actions {
-        statelogs: block.actions::<abi::contract::actions::Statelog>(&["myaccount"])
-            .map(|(action, trx)| StateLog {
+        transfers: block.actions::<abi::contract::actions::Transfer>(&["eosio.token"])
+            .map(|(action, trace)| Transfer {
                 // set action fields
             })
             .collect(),

@@ -33,6 +33,12 @@ impl Type {
             pub struct #camel_name {
                 #(#fields),*
             }
+            impl std::str::FromStr for #camel_name {
+                type Err = substreams_antelope::Error;
+                fn from_str(value: &str) -> Result<Self, Self::Err> {
+                    substreams_antelope::decoder::decode::<Self>(value)
+                }
+            }
         }
     }
 }
@@ -74,6 +80,12 @@ mod tests {
                 pub name_field: Name,
                 #[serde(deserialize_with = "substreams_antelope::decoder::str_or_u64")]
                 pub uint64_field: Uint64
+            }
+            impl std::str::FromStr for MyStruct {
+                type Err = substreams_antelope::Error;
+                fn from_str(value: &str) -> Result<Self, Self::Err> {
+                    substreams_antelope::decoder::decode::<Self>(value)
+                }
             }
         };
         assert_eq!(generated_tokens.to_string(), expected_tokens.to_string());
