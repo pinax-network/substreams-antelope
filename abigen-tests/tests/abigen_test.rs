@@ -191,7 +191,8 @@ mod tests {
                     quantity: "1.0000 EOS".into(),
                     memo: "hello".into(),
                 },
-                &transfer_trace.action_traces[0]
+                &transfer_trace.action_traces[0],
+                &transfer_trace
             ),]
         );
         pretty_assertions::assert_eq!(actions.len(), 1);
@@ -210,7 +211,8 @@ mod tests {
                     to: "acc2".into(),
                     quantity: "1.0000 EOS".into(),
                 },
-                &transfer_trace.action_traces[4]
+                &transfer_trace.action_traces[4],
+                &transfer_trace
             ),]
         );
         pretty_assertions::assert_eq!(actions.len(), 1);
@@ -231,7 +233,8 @@ mod tests {
                         quantity: "1.0000 EOS".into(),
                         memo: "hello".into(),
                     },
-                    &transfer_trace.action_traces[1]
+                    &transfer_trace.action_traces[1],
+                    &transfer_trace
                 ),
                 (
                     actions::Transfer {
@@ -240,7 +243,8 @@ mod tests {
                         quantity: "1.0000 EOS".into(),
                         memo: "hello".into(),
                     },
-                    &transfer_trace.action_traces[2]
+                    &transfer_trace.action_traces[2],
+                    &transfer_trace
                 ),
             ]
         );
@@ -259,7 +263,8 @@ mod tests {
                     to: "acc2".into(),
                     quantity: "1.0000 EOS".into(),
                 },
-                &transfer_trace.action_traces[5]
+                &transfer_trace.action_traces[5],
+                &transfer_trace
             ),]
         );
     }

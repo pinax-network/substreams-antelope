@@ -54,7 +54,7 @@ fn map_action_traces(block: Block) -> Result<ActionTraces, Error> {
 }
 ```
 
-Or, using `actions()` filter to filter all actions of `Statelog` type from `myaccount` account:
+Or, using `actions()` helper method to filter all actions of `Statelog` type from `myaccount` account. As a parameter you can specify a list of contract account names to include actions from, that can be empty if you want actions with this signature from any contract account.
 
 **src/lib.rs**
 
@@ -62,8 +62,8 @@ Or, using `actions()` filter to filter all actions of `Statelog` type from `myac
 #[substreams::handlers::map]
 fn map_actions(param_account: String, block: substreams_antelope::Block) -> Result<Actions, substreams::errors::Error> {
     Ok(Actions {
-        statelogs: block.actions::<abi::contract::actions::Statelog>(&["myaccount"])
-            .map(|(action, trx)| StateLog {
+        transfers: block.actions::<abi::contract::actions::Transfer>(&["eosio.token"])
+            .map(|(action, trace)| Transfer {
                 // set action fields
             })
             .collect(),

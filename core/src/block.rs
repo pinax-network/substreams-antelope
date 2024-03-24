@@ -38,19 +38,19 @@ impl pb::Block {
         traces.filter(|trx| trx.receipt.is_some() && trx.receipt.as_ref().unwrap().status == TransactionstatusExecuted as i32)
     }
 
-    /// returns all executed action traces from the block without consuming it
+    /// returns all executed action traces along with related transaction traces from the block without consuming it
     /// ```ignore
     /// let actions = block.action_traces()
-    ///     .map(|action| {
+    ///     .map(|(action, trx)| {
     ///         // your action logic
     ///     })
     ///     .collect();
     /// ```
-    pub fn action_traces(&self) -> impl Iterator<Item = &pb::ActionTrace> {
-        self.transaction_traces().flat_map(|trx| &trx.action_traces)
+    pub fn action_traces(&self) -> impl Iterator<Item = (&pb::ActionTrace, &pb::TransactionTrace)> {
+        self.transaction_traces().flat_map(|trx| trx.action_traces.iter().map(move |trace| (trace, trx)))
     }
 
-    /// returns all executed action traces from the block and consumes it
+    /// returns all executed action traces from the block and consumes it. Transaction traces are not returned.
     /// ```ignore
     /// let actions = block.into_action_traces()
     ///     .map(|action| {
@@ -62,22 +62,22 @@ impl pb::Block {
         self.into_transaction_traces().flat_map(|trx| trx.action_traces)
     }
 
-    /// returns all executed actions and notifications of a specified type from the block which match the given contract accounts
+    /// returns all executed actions and notifications of a specified type from the block which match the given contract accounts, or all if account is empty
     /// ```ignore
     /// let actions = block.all_actions::<abi::contract::actions::Statelog>(&["mycontract"])
-    ///     .map(|(action, trace)| StateChange {
+    ///     .map(|(action, trace, trx)| StateChange {
     ///         // set action fields
     ///     })
     ///     .collect();
     /// ```
-    pub fn all_actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
-        self.action_traces().filter_map(|trace| {
+    pub fn all_actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
+        self.action_traces().filter_map(|(trace, trx)| {
             let contract = trace.action.as_ref().unwrap().account.as_str();
-            if !accounts.contains(&contract) {
+            if !accounts.is_empty() && !accounts.contains(&contract) {
                 return None;
             }
 
-            A::match_and_decode(trace).map(|action| (action, trace))
+            A::decode(trace).map(|action| (action, trace, trx)).ok()
         })
     }
 
@@ -85,14 +85,14 @@ impl pb::Block {
     /// NOT including action notifications
     /// ```ignore
     /// let actions = block.actions::<abi::contract::actions::Statelog>(&["mycontract"])
-    ///     .map(|(action, trace)| StateChange {
+    ///     .map(|(action, trx)| StateChange {
     ///         // set action fields
     ///     })
     ///     .collect();
     /// ```
-    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
+    pub fn actions<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
         self.all_actions(accounts)
-            .filter(|(_, trace)| trace.receiver.as_str() == trace.action.as_ref().unwrap().account.as_str())
+            .filter(|(_, trace, _)| trace.receiver.as_str() == trace.action.as_ref().unwrap().account.as_str())
     }
 
     /// returns all action notifications of a specified type from the block which match the given contract accounts
@@ -104,9 +104,9 @@ impl pb::Block {
     ///     })
     ///     .collect();
     /// ```
-    pub fn notifications<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace)> + 'a {
+    pub fn notifications<'a, A: crate::action::Action>(&'a self, accounts: &'a [&str]) -> impl Iterator<Item = (A, &pb::ActionTrace, &pb::TransactionTrace)> + 'a {
         self.all_actions(accounts)
-            .filter(|(_, trace)| trace.receiver.as_str() != trace.action.as_ref().unwrap().account.as_str())
+            .filter(|(_, trace, _)| trace.receiver.as_str() != trace.action.as_ref().unwrap().account.as_str())
     }
 }
 
