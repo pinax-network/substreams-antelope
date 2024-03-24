@@ -77,7 +77,7 @@ impl pb::Block {
                 return None;
             }
 
-            A::decode(trace).map(|action| (action, trace, trx)).ok()
+            A::match_and_decode(trace).map(|action| (action, trace, trx))
         })
     }
 
