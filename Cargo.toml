@@ -25,6 +25,6 @@ license = "MIT OR Apache-2.0"
 rust-version = "1.75"
 
 [workspace.dependencies]
-substreams-antelope = { version = "0.*", path = "./substreams-antelope" }
-substreams-antelope-core = { version = "0.*", path = "./core" }
-substreams-antelope-abigen = { version = "0.*", path = "./abigen" }
+substreams-antelope = { version = "0.3.*", path = "./substreams-antelope" }
+substreams-antelope-core = { version = "0.3.*", path = "./core" }
+substreams-antelope-abigen = { version = "0.3.*", path = "./abigen" }
