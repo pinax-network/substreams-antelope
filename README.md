@@ -64,7 +64,7 @@ fn map_actions(param_account: String, block: substreams_antelope::Block) -> Resu
     Ok(Actions {
         transfers: block.actions::<abi::contract::actions::Transfer>(&["eosio.token"])
             .map(|(action, trace)| Transfer {
-                // set action fields
+                // action.to, action.from, action.memo, action.quantity are available here.
             })
             .collect(),
     })
@@ -79,11 +79,19 @@ To generate ABI bindings for your smart contract you can add `abi/contract.abi.j
 
 ```rust
 fn main() {
-    substreams_antelope::Abigen::new("Contract", "abi/gems.blend.abi.json")
+    substreams_antelope::Abigen::new("Contract", "abi/eosio.token.json")
         .expect("failed to load abi")
         .generate()
         .expect("failed to generate contract")
-        .write_to_file("src/abi/gems.blend.abi.rs")
+        .write_to_file("src/abi/eosio.token.rs")
         .expect("failed to write contract");
 }
 ```
+
+## Release
+- Bump up version in workspace `Cargo.toml`
+- Commit changes
+- Tag a release: https://github.com/pinax-network/substreams-antelope/releases
+- Publish packages in this order: `core`, `abigen`, `substreams-antelope`.
+
+TODO: automate releases with github actions
