@@ -7,6 +7,7 @@ pub mod decoder;
 pub mod field;
 pub mod rust;
 pub mod ty;
+pub mod type_alias;
 pub mod types;
 
 pub use build::Abigen;

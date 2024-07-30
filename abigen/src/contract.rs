@@ -1,6 +1,8 @@
 use proc_macro2::TokenStream;
 use quote::quote;
 
+use crate::type_alias::TypeAlias;
+
 use super::abi::ABI;
 use super::action::Action;
 use super::ty::Type;
@@ -8,12 +10,14 @@ use super::ty::Type;
 #[derive(Debug, Clone, Default)]
 pub struct Contract {
     pub types: Vec<Type>,
+    pub type_aliases: Vec<TypeAlias>,
     pub actions: Vec<Action>,
 }
 
 impl Contract {
     pub fn generate(&self, account: Option<String>) -> TokenStream {
         let types: Vec<_> = self.types.iter().filter(|ty| !ty.is_entity).map(Type::generate).collect();
+        let type_aliases: Vec<_> = self.type_aliases.iter().map(TypeAlias::generate).collect();
         let actions: Vec<_> = self.actions.iter().map(Action::generate).collect();
 
         let account = match account {
@@ -26,6 +30,7 @@ impl Contract {
             pub const ACCOUNT: Option<&'static str> = #account;
             pub mod types {
                 use substreams_antelope::types::*;
+                #(#type_aliases)*
                 #(#types)*
             }
             pub mod actions {
@@ -42,6 +47,7 @@ impl Contract {
 impl From<ABI> for Contract {
     fn from(abi: ABI) -> Self {
         let mut types = abi.structs.into_iter().map(Type::from).collect::<Vec<_>>();
+        let type_aliases = abi.types.into_iter().map(TypeAlias::from).collect::<Vec<_>>();
 
         let actions: Vec<Action> = abi
             .actions
@@ -55,7 +61,11 @@ impl From<ABI> for Contract {
             })
             .collect();
 
-        Contract { types, actions }
+        Contract {
+            types,
+            type_aliases,
+            actions,
+        }
     }
 }
 

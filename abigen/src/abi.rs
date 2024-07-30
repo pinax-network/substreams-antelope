@@ -44,9 +44,9 @@ pub struct ABIVariant {
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ABITypes {
-    new_type_name: String,
+    pub new_type_name: String,
     #[serde(rename = "type")]
-    ty: String,
+    pub ty: String,
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
