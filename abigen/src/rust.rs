@@ -20,7 +20,7 @@ pub fn abi_type_to_rust_type(tp: &str) -> Option<&str> {
         "float128" => "Float128",
         "time_point" => "TimePoint",
         "time_point_sec" => "TimePointSec",
-        "block_timestamp_type" => "BlockTimeStampType",
+        "block_timestamp_type" => "BlockTimestampType",
         "name" => "Name",
         "&[u8]" => "Bytes",
         "string" => "String",

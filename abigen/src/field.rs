@@ -85,7 +85,7 @@ mod tests {
             ("float128", quote! { Float128 }, quote! {}),
             ("time_point", quote! { TimePoint }, quote! {}),
             ("time_point_sec", quote! { TimePointSec }, quote! {}),
-            ("block_timestamp_type", quote! { BlockTimeStampType }, quote! {}),
+            ("block_timestamp_type", quote! { BlockTimestampType }, quote! {}),
             ("name", quote! { Name }, quote! {}),
             ("&[u8]", quote! { Bytes }, quote! {}),
             ("string", quote! { String }, quote! {}),
