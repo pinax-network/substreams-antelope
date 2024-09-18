@@ -31,7 +31,7 @@ Refer to [Docs.rs](https://docs.rs/substreams-antelope/latest/substreams_antelop
 ```toml
 [dependencies]
 substreams = "0.5"
-substreams-antelope = "0.4"
+substreams-antelope = "0.5"
 ```
 
 **src/lib.rs**
