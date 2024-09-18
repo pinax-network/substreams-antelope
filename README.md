@@ -5,7 +5,7 @@
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-substreams.antelope-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/substreams-antelope)
 [<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pinax-network/substreams-antelope/ci.yml?branch=develop&style=for-the-badge" height="20">](https://github.com/pinax-network/substreams-antelope/actions?query=branch%3Adevelop)
 
-> This library contains the generated protobuffer for the [Antelope blocks](https://github.com/pinax-network/firehose-antelope/blob/develop/proto/sf/antelope/type/v1/type.proto) as well as helper methods to extract and parse block data.
+> This library contains the generated Rust protobuf bindings for [Antelope blocks](https://github.com/pinax-network/firehose-antelope/blob/develop/proto/sf/antelope/type/v1/type.proto) as well as helper methods to extract and parse block data.
 
 ## 📖 Documentation
 
@@ -89,6 +89,7 @@ fn main() {
 ```
 
 ## Release
+- Run `gen.sh` if there were changes in protobufs
 - Bump up version in workspace `Cargo.toml`
 - Commit changes
 - Tag a release: https://github.com/pinax-network/substreams-antelope/releases
