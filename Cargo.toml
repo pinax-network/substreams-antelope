@@ -8,7 +8,7 @@ opt-level = 's'
 strip = "debuginfo"
 
 [workspace.package]
-version = "0.5.0"
+version = "0.6.0"
 edition = "2021"
 description = "Substreams development kit for Antelope chains, contains Firehose Block model and helpers."
 authors = [
@@ -25,6 +25,6 @@ license = "MIT OR Apache-2.0"
 rust-version = "1.76"
 
 [workspace.dependencies]
-substreams-antelope = { version = "0.5.*", path = "./substreams-antelope" }
-substreams-antelope-core = { version = "0.5.*", path = "./core" }
-substreams-antelope-abigen = { version = "0.5.*", path = "./abigen" }
+substreams-antelope = { version = "0.6.*", path = "./substreams-antelope" }
+substreams-antelope-core = { version = "0.6.*", path = "./core" }
+substreams-antelope-abigen = { version = "0.6.*", path = "./abigen" }
