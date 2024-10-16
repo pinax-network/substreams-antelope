@@ -30,8 +30,8 @@ Refer to [Docs.rs](https://docs.rs/substreams-antelope/latest/substreams_antelop
 
 ```toml
 [dependencies]
-substreams = "0.5"
-substreams-antelope = "0.5"
+substreams = "0.6"
+substreams-antelope = "0.6"
 ```
 
 **src/lib.rs**
@@ -93,6 +93,6 @@ fn main() {
 - Bump up version in workspace `Cargo.toml`
 - Commit changes
 - Tag a release: https://github.com/pinax-network/substreams-antelope/releases
-- Publish packages in this order: `core`, `abigen`, `substreams-antelope`.
+- Publish packages in this order: `substreams-antelope-core`, `substreams-antelope-abigen`, `substreams-antelope`.
 
 TODO: automate releases with github actions
